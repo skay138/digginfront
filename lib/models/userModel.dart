@@ -1,7 +1,7 @@
 class userModel {
   final String uid, email, nickname;
   final String? introduce, image, gender, birth;
-  final bool is_active;
+  final bool is_active, is_signed;
 
   userModel.fromJson(Map<String, dynamic> json)
       : uid = json['uid'],
@@ -11,5 +11,6 @@ class userModel {
         image = json['image'],
         gender = json['gender'],
         birth = json['birth'],
-        is_active = json['is_active'];
+        is_active = json['is_active'],
+        is_signed = json['is_signed'];
 }

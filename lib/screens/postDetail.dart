@@ -3,34 +3,18 @@ import 'package:digginfront/widgets/youtube.dart';
 import 'package:flutter/material.dart';
 
 class PostDetail extends StatelessWidget {
-  final int id, likecount, userlike;
-  final int? parent;
-  final String title, uid, youtube_link, nickname, date;
-  final String? content;
-  final Map youtube_data;
+  final postModel post;
 
   PostDetail({
     super.key,
-    required this.title,
-    required this.id,
-    required this.uid,
-    required this.likecount,
-    required this.userlike,
-    this.content,
-    required this.youtube_link,
-    required this.nickname,
-    required this.date,
-    this.parent,
-    required this.youtube_data,
+    required this.post,
   });
-
-  late Future<postModel> post;
 
   bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
-    String youtubeLinkId = youtube_link.split('v=')[1];
+    String youtubeLinkId = post.youtube_link.split('v=')[1];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,13 +27,14 @@ class PostDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Hero(
-                    tag: id,
+                    tag: post.id,
                     child: Container(
+                      height: 300,
                       width: 300,
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(
                           color: Colors.black,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(0),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 10,
@@ -57,7 +42,7 @@ class PostDetail extends StatelessWidget {
                                 color: Colors.white.withOpacity(0.5))
                           ]),
                       child: Image.network(
-                        youtube_data['thumb'],
+                        post.youtube_data['thumb'],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -67,15 +52,15 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Player(youtubeLinkId, youtube_data['title']),
-              Text(title),
-              Text(content.toString()),
-              Text(nickname),
-              Text(likecount.toString()),
-              Icon(userlike == 0 ? Icons.favorite_border : Icons.favorite),
-              Text(date),
-              Text(youtube_data['title']),
-              Text(youtube_data['desc']),
+              Player(youtubeLinkId, post.youtube_data['title']),
+              Text(post.title),
+              Text(post.content.toString()),
+              Text(post.nickname),
+              Text(post.like_count.toString()),
+              Icon(post.userlike == 0 ? Icons.favorite_border : Icons.favorite),
+              Text(post.date),
+              Text(post.youtube_data['title']),
+              Text(post.youtube_data['desc']),
             ],
           ),
         ),

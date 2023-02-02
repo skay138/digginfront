@@ -18,10 +18,9 @@ class Account {
     if (response.statusCode == 200) {
       final profile = jsonDecode(response.body);
       return userModel.fromJson(profile);
-    } else if (response.statusCode == 201) {
-      return 'new';
+    } else {
+      throw Error();
     }
-    throw Error();
   }
 
   static Future<userModel> getprofile(String uid) async {
@@ -36,12 +35,29 @@ class Account {
 }
 
 class Post {
-  static const String baseUrl =
-      "http://diggin.kro.kr:4000/post/?number=5&page=1";
+  static const String baseUrl = "http://diggin.kro.kr:4000/post/";
 
-  static Future<List<postModel>> getPosts() async {
+  static Future<List<postModel>> getRecommendedPost() async {
+    const String recommended = "search?recommended=5";
     List<postModel> postinstances = [];
-    final url = Uri.parse(baseUrl);
+    final url = Uri.parse('$baseUrl$recommended');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> posts = jsonDecode(response.body);
+      for (var post in posts) {
+        final instance = postModel.fromJson(post);
+        postinstances.add(instance);
+      }
+      return postinstances;
+    } else {
+      throw Error();
+    }
+  }
+
+  static Future<List<postModel>> getRecentPosts(int number, int page) async {
+    String recentPosts = "?number=$number&page=$page";
+    List<postModel> postinstances = [];
+    final url = Uri.parse('$baseUrl$recentPosts');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> posts = jsonDecode(response.body);

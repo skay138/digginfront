@@ -1,18 +1,17 @@
-import 'package:digginfront/models/userModel.dart';
-import 'package:digginfront/screens/startPage.dart';
+import 'package:digginfront/screens/loginPage.dart';
 import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/screens/signUpPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class LoginStatusPage extends StatelessWidget {
+  const LoginStatusPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Colors.black,
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -24,14 +23,15 @@ class HomePage extends StatelessWidget {
               future: django,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.runtimeType == userModel) {
+                  print(snapshot.data!.is_signed);
+                  if (snapshot.data!.is_signed == true) {
                     return MainPage(user: snapshot.data);
                   } else {
-                    return const SignUp();
+                    return const SingUp();
                   }
                 } else {
                   return const Center(
-                    child: Text('...'),
+                    child: CircularProgressIndicator(),
                   );
                 }
               },

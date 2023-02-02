@@ -3,28 +3,24 @@ import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 
-class RecommendedPost extends StatelessWidget {
-  RecommendedPost({super.key});
+class RecentPost extends StatelessWidget {
+  final int number;
+  final int page;
+  RecentPost({super.key, required this.number, required this.page});
 
-  final Future<List<postModel>> posts = Post.getRecommendedPost();
+  late final Future<List<postModel>> posts = Post.getRecentPosts(number, page);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 150,
       child: FutureBuilder(
         future: posts,
         builder: (context, res) {
           if (res.hasData) {
-            return Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Expanded(
-                  child: makeList(res),
-                )
-              ],
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [makeList(res)],
             );
           }
           return const Center(
@@ -37,23 +33,21 @@ class RecommendedPost extends StatelessWidget {
 }
 
 ListView makeList(AsyncSnapshot<List<postModel>> snapshot) {
-  ScrollController controller = ScrollController(
-      initialScrollOffset: 200 * snapshot.data!.length / 2 - 85);
   return ListView.separated(
-    controller: controller,
-    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    shrinkWrap: true,
     scrollDirection: Axis.horizontal,
+    padding: const EdgeInsets.symmetric(vertical: 10),
     itemCount: snapshot.data!.length,
     itemBuilder: (context, index) {
       var post = snapshot.data![index];
       return DigginPost(
-        size: 200,
+        size: 100,
         post: post,
       );
     },
     separatorBuilder: (context, index) => const SizedBox(
-      width: 40,
-      height: 10,
+      width: 20,
+      height: 0,
     ),
   );
 }
