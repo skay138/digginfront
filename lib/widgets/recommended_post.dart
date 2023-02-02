@@ -47,6 +47,8 @@ ListView makeList(AsyncSnapshot<List<postModel>> snapshot) {
     itemBuilder: (context, index) {
       var post = snapshot.data![index];
       return DigginPost(
+        needText: true,
+        borderRadius: 100,
         size: 200,
         post: post,
       );

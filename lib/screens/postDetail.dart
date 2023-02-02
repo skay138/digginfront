@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 class PostDetail extends StatelessWidget {
   final postModel post;
 
-  PostDetail({
+  const PostDetail({
     super.key,
     required this.post,
   });
-
-  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {

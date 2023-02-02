@@ -1,6 +1,7 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
+import 'package:digginfront/screens/feedPage.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/recent_post.dart';
@@ -82,15 +83,21 @@ class MainPage extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Recent Posts',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
                   ),
-                  Icon(
-                    Icons.add_circle,
-                    size: 30,
-                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => const FeedPage(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.calendar_view_month_sharp)),
                 ],
               ),
               const SizedBox(
@@ -110,11 +117,24 @@ class MainPage extends StatelessWidget {
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(
             icon: Icon(Icons.text_snippet),
-            label: '나의 판매글',
+            label: '',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const FeedPage(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.feed)),
+            label: '피드',
           ),
           BottomNavigationBarItem(
             icon: IconButton(

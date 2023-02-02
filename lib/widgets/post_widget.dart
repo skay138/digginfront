@@ -5,8 +5,17 @@ import 'package:flutter/material.dart';
 class DigginPost extends StatelessWidget {
   final double size;
   final postModel post;
+  final double borderRadius;
+  final bool needText;
+  bool isFeed;
 
-  const DigginPost({super.key, required this.size, required this.post});
+  DigginPost(
+      {super.key,
+      required this.size,
+      required this.post,
+      required this.borderRadius,
+      required this.needText,
+      this.isFeed = false});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +54,7 @@ class DigginPost extends StatelessWidget {
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(100),
+                        borderRadius: BorderRadius.circular(borderRadius),
                         boxShadow: [
                           BoxShadow(
                               blurRadius: 10,
@@ -58,19 +67,47 @@ class DigginPost extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: size,
-                  height: 55,
-                  child: Center(
-                    child: Text(
-                      post.youtube_data['title'],
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    ),
-                  ),
-                ),
+                isFeed
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            post.title,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(post.nickname),
+                              Text(
+                                post.like_count.toString(),
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    : needText
+                        ? SizedBox(
+                            width: size,
+                            height: 50,
+                            child: Center(
+                              child: Text(
+                                post.youtube_data['title'],
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(height: 0),
               ],
             ),
           )
@@ -106,7 +143,7 @@ class DigginPost extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(0),
+                      borderRadius: BorderRadius.circular(borderRadius),
                       boxShadow: [
                         BoxShadow(
                             blurRadius: 10,
@@ -118,19 +155,23 @@ class DigginPost extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(
-                  width: size,
-                  height: 30,
-                  child: Center(
-                    child: Text(
-                      post.title,
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black),
-                    ),
-                  ),
-                ),
+                needText
+                    ? SizedBox(
+                        width: size,
+                        height: 30,
+                        child: Center(
+                          child: Text(
+                            post.title,
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(
+                        height: 0,
+                      ),
               ],
             ),
           );

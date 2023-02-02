@@ -42,6 +42,24 @@ class Post {
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recommended');
     final response = await http.get(url);
+    try {
+      final List<dynamic> posts = jsonDecode(response.body);
+      for (var post in posts) {
+        final instance = postModel.fromJson(post);
+        postinstances.add(instance);
+      }
+      return postinstances;
+    } catch (e) {
+      print(e);
+      throw Error();
+    }
+  }
+
+  static Future<List<postModel>> getRecentPosts(int number, int page) async {
+    String recentPosts = "?number=$number&page=$page";
+    List<postModel> postinstances = [];
+    final url = Uri.parse('$baseUrl$recentPosts');
+    final response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -54,8 +72,8 @@ class Post {
     }
   }
 
-  static Future<List<postModel>> getRecentPosts(int number, int page) async {
-    String recentPosts = "?number=$number&page=$page";
+  static Future<List<postModel>> getMyPosts(String uid) async {
+    String recentPosts = "mypost?uid=$uid";
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recentPosts');
     final response = await http.get(url);
