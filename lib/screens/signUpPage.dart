@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:digginfront/widgets/date_picker.dart';
 
 class SingUp extends StatelessWidget {
   const SingUp({super.key});
@@ -71,7 +72,7 @@ class SingUp extends StatelessWidget {
                         children: [
                           makeInput(label: "닉네임(필수)"),
                           makeInput(label: "소개"),
-                          makeInput(label: "생일"),
+                          const DatePicker(),
                           makeInput(label: "성별")
                         ],
                       ),
