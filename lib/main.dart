@@ -3,6 +3,7 @@ import 'package:digginfront/widgets/loginStatusPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,13 @@ class App extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => GoogleSignInProvider(),
       child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ko', 'KR'),
+        ],
         theme: ThemeData(
           textTheme: const TextTheme(
             displayLarge: TextStyle(
@@ -28,14 +36,14 @@ class App extends StatelessWidget {
           cardColor: const Color(0xfff4eddb),
           colorScheme: ColorScheme(
             onPrimary: Colors.black.withOpacity(0.7),
-            onSecondary: Colors.blue,
+            onSecondary: const Color.fromARGB(255, 9, 46, 77),
             primary: Colors.black.withOpacity(0.7),
-            secondary: Colors.blue,
+            secondary: const Color.fromARGB(255, 9, 46, 77),
             brightness: Brightness.light,
             background: Colors.black.withOpacity(0.7),
             error: Colors.amber,
             onError: Colors.red,
-            onBackground: Colors.blue,
+            onBackground: const Color.fromARGB(255, 175, 199, 219),
             surface: Colors.green,
             onSurface: Colors.pink,
           ),

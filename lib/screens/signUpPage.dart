@@ -74,7 +74,6 @@ class SingUp extends StatelessWidget {
                           makeInput(label: "닉네임(필수)"),
                           makeInput(label: "소개"),
                           const DatePicker(),
-                          makeInput(label: "성별"),
                           const GenderPicker(),
                         ],
                       ),

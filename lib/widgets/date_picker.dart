@@ -13,19 +13,30 @@ class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24.0),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.date_range_outlined,
-              size: 30,
-            ),
-            onPressed: () => _selectDate(context),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '생일',
+            style: TextStyle(fontSize: 15),
           ),
-          Text(
-            _selectedDate,
-            style: const TextStyle(fontSize: 24),
+          Row(
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.date_range_outlined,
+                  size: 33,
+                ),
+                onPressed: () => _selectDate(context),
+              ),
+              Text(
+                _selectedDate,
+                style: const TextStyle(fontSize: 24),
+              ),
+            ],
           ),
         ],
       ),
@@ -49,7 +60,7 @@ class _DatePickerState extends State<DatePicker> {
         });
     if (selected != null) {
       setState(() {
-        _selectedDate = (DateFormat.yMMMd()).format(selected);
+        _selectedDate = (DateFormat('y년 M월 d일')).format(selected);
       });
     }
   }
