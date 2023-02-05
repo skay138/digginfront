@@ -1,4 +1,5 @@
 import 'package:digginfront/provider/google_sign_in.dart';
+import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +74,8 @@ class SingUp extends StatelessWidget {
                           makeInput(label: "닉네임(필수)"),
                           makeInput(label: "소개"),
                           const DatePicker(),
-                          makeInput(label: "성별")
+                          makeInput(label: "성별"),
+                          const GenderPicker(),
                         ],
                       ),
                     ),
