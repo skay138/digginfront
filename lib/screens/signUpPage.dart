@@ -6,13 +6,59 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
 
-class SingUp extends StatelessWidget {
-  const SingUp({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  Map<String, dynamic> userInfo = {
+    'uid': '',
+    'email': '',
+    'nickname': '',
+    'introduce': '',
+    'image': '',
+    'bgimage': '',
+    'gender': '',
+    'birth': '',
+    'is_active': true,
+    'is_signed': false,
+  };
+  setNickname(nickname) {
+    setState(() {
+      userInfo[nickname] = nickname;
+    });
+  }
+
+  setIntroduce(introduce) {
+    setState(() {
+      userInfo['introduce'] = introduce;
+    });
+  }
+
+  setBirth(birth) {
+    setState(() {
+      userInfo['birth'] = birth;
+    });
+  }
+
+  setGender(gender) {
+    setState(() {
+      userInfo['gender'] = gender;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    late final user = FirebaseAuth.instance.currentUser;
-    print(user);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userInfo['email'] = user.email.toString();
+        userInfo['nickname'] = user.displayName.toString();
+      });
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -92,7 +138,9 @@ class SingUp extends StatelessWidget {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {},
+                          onPressed: () {
+                            print(userInfo);
+                          },
                           color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
@@ -121,7 +169,7 @@ class SingUp extends StatelessWidget {
   }
 }
 
-Widget makeInput({label, obsureText = false}) {
+Widget makeInput({label, obsureText = false, setter}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
