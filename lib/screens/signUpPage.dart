@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -26,27 +26,9 @@ class _SignUpState extends State<SignUp> {
     'is_active': true,
     'is_signed': false,
   };
-  setNickname(nickname) {
+  void setInfo(String infoType, info) {
     setState(() {
-      userInfo[nickname] = nickname;
-    });
-  }
-
-  setIntroduce(introduce) {
-    setState(() {
-      userInfo['introduce'] = introduce;
-    });
-  }
-
-  setBirth(birth) {
-    setState(() {
-      userInfo['birth'] = birth;
-    });
-  }
-
-  setGender(gender) {
-    setState(() {
-      userInfo['gender'] = gender;
+      userInfo[infoType] = info;
     });
   }
 
@@ -56,7 +38,6 @@ class _SignUpState extends State<SignUp> {
     if (user != null) {
       setState(() {
         userInfo['email'] = user.email.toString();
-        userInfo['nickname'] = user.displayName.toString();
       });
     }
     return Scaffold(
@@ -117,10 +98,24 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: [
-                          makeInput(label: "닉네임(필수)"),
-                          makeInput(label: "소개"),
-                          const DatePicker(),
-                          const GenderPicker(),
+                          makeInput(
+                            label: "닉네임(필수)",
+                            setInfo: setInfo,
+                            infoType: 'nickname',
+                          ),
+                          makeInput(
+                            label: "소개",
+                            setInfo: setInfo,
+                            infoType: 'introduce',
+                          ),
+                          DatePicker(
+                            setInfo: setInfo,
+                            infoType: 'birth',
+                          ),
+                          GenderPicker(
+                            setInfo: setInfo,
+                            infoType: 'gender',
+                          ),
                         ],
                       ),
                     ),
@@ -138,9 +133,7 @@ class _SignUpState extends State<SignUp> {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {
-                            print(userInfo);
-                          },
+                          onPressed: () {},
                           color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
@@ -169,7 +162,7 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Widget makeInput({label, obsureText = false, setter}) {
+Widget makeInput({label, obsureText = false, setInfo, infoType}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -182,6 +175,9 @@ Widget makeInput({label, obsureText = false, setter}) {
         height: 5,
       ),
       TextField(
+        onChanged: (value) {
+          setInfo(infoType, value);
+        },
         obscureText: obsureText,
         decoration: InputDecoration(
           contentPadding:

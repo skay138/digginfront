@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class GenderPicker extends StatefulWidget {
-  const GenderPicker({super.key});
+  const GenderPicker({Key? key, required this.setInfo, required this.infoType})
+      : super(key: key);
+  final Function setInfo;
+  final String infoType;
 
   @override
   State<GenderPicker> createState() => _GenderPickerState();
@@ -28,7 +31,10 @@ class _GenderPickerState extends State<GenderPicker> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               GestureDetector(
-                onTap: () => setState(() => _gender = 'male'),
+                onTap: () {
+                  setState(() => _gender = 'male');
+                  widget.setInfo(widget.infoType, _gender);
+                },
                 child: genderBtn(
                   'male',
                   _gender,
@@ -38,7 +44,10 @@ class _GenderPickerState extends State<GenderPicker> {
               ),
               const SizedBox(width: 4),
               GestureDetector(
-                onTap: () => setState(() => _gender = 'female'),
+                onTap: () {
+                  setState(() => _gender = 'female');
+                  widget.setInfo(widget.infoType, _gender);
+                },
                 child: genderBtn(
                   'female',
                   _gender,

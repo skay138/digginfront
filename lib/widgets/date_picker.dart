@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DatePicker extends StatefulWidget {
-  const DatePicker({super.key});
-
+  const DatePicker({Key? key, required this.setInfo, required this.infoType})
+      : super(key: key);
+  final Function setInfo;
+  final String infoType;
   @override
   State<DatePicker> createState() => _DatePickerState();
 }
@@ -62,6 +64,7 @@ class _DatePickerState extends State<DatePicker> {
       setState(() {
         _selectedDate = (DateFormat('y년 M월 d일')).format(selected);
       });
+      widget.setInfo(widget.infoType, _selectedDate);
     }
   }
 }
