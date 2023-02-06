@@ -1,3 +1,4 @@
+import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
 import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  userModel user;
+  SignUp({super.key, required this.user});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -24,7 +26,7 @@ class _SignUpState extends State<SignUp> {
     'gender': '',
     'birth': '',
     'is_active': true,
-    'is_signed': false,
+    'is_signed': true,
   };
   void setInfo(String infoType, info) {
     setState(() {
@@ -34,24 +36,28 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        userInfo['email'] = user.email.toString();
-      });
-    }
+    final user = widget.user;
+    setState(() {
+      userInfo['uid'] = user.uid;
+      userInfo['email'] = user.email;
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-            onPressed: () async {
-              final provider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
-              await FirebaseAuth.instance.signOut();
-              await provider.googleLogout();
-            },
+            onPressed: user.is_signed
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : () async {
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
+                    await FirebaseAuth.instance.signOut();
+                    await provider.googleLogout();
+                  },
             icon: const Icon(
               Icons.arrow_back_ios,
               size: 20,
@@ -71,28 +77,44 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "처음 이용하시는군요!",
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "추가 정보를 입력해주세요",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        )
-                      ],
+                      children: user.is_signed
+                          ? [
+                              const Text(
+                                "수정할 정보를 입력해주세요!",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              )
+                            ]
+                          : [
+                              const Text(
+                                "처음 이용하시는군요!",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "추가 정보를 입력해주세요",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              )
+                            ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),

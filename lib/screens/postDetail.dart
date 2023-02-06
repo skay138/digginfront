@@ -1,11 +1,16 @@
+import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
+import 'package:digginfront/services/api_services.dart';
+import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/youtube.dart';
 import 'package:flutter/material.dart';
 
 class PostDetail extends StatelessWidget {
   final postModel post;
 
-  const PostDetail({
+  late final Future<List<commentModel>> comments = Comment.getComment(post.id);
+
+  PostDetail({
     super.key,
     required this.post,
   });
@@ -59,6 +64,10 @@ class PostDetail extends StatelessWidget {
               Text(post.date),
               Text(post.youtube_data['title']),
               Text(post.youtube_data['desc']),
+              const SizedBox(
+                height: 30,
+              ),
+              Commentwidget(comments: comments)
             ],
           ),
         ),

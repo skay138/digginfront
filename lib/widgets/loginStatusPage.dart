@@ -27,7 +27,9 @@ class LoginStatusPage extends StatelessWidget {
                   if (snapshot.data!.is_signed == true) {
                     return MainPage(user: snapshot.data);
                   } else {
-                    return const SignUp();
+                    return SignUp(
+                      user: snapshot.data,
+                    );
                   }
                 } else {
                   return const Center(
