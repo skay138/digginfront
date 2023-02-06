@@ -35,7 +35,7 @@ class PostGridView extends StatelessWidget {
             itemBuilder: (context, index) {
               var post = res.data![index];
               return DigginPost(
-                  needText: isFeed ? false : true,
+                  needText: isFeed ? true : false,
                   isFeed: isFeed ? true : false,
                   borderRadius: 0,
                   size: isFeed ? 350 : 200,

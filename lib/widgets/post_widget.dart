@@ -78,25 +78,28 @@ class DigginPost extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(post.nickname),
-                              Text(
-                                post.like_count.toString(),
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 35),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('작성자 : ${post.nickname}'),
+                                Text(
+                                  post.like_count.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       )
                     : needText
                         ? SizedBox(
                             width: size,
-                            height: 50,
+                            height: 45,
                             child: Center(
                               child: Text(
                                 post.youtube_data['title'],
@@ -158,7 +161,7 @@ class DigginPost extends StatelessWidget {
                 needText
                     ? SizedBox(
                         width: size,
-                        height: 30,
+                        height: 25,
                         child: Center(
                           child: Text(
                             post.title,

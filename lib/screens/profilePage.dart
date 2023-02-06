@@ -1,5 +1,6 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/screens/signUpPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/post_grid_view.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +26,12 @@ class ProfilePage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
-                  children: const [
-                    SizedBox(height: 16),
-                    SizedBox(height: 16),
-                    _ProfileInfoRow(),
+                  children: [
+                    const SizedBox(height: 16),
+                    const SizedBox(height: 16),
+                    _ProfileInfoRow(
+                      user: user,
+                    ),
                   ],
                 ),
               ),
@@ -119,7 +122,18 @@ class _TopPortion extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 17, fontWeight: FontWeight.w400),
                   ),
-                  const Icon(Icons.edit)
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => SignUp(
+                              user: user,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Icon(Icons.edit))
                 ],
               ),
             ),
@@ -149,7 +163,8 @@ class TriangleClipper extends CustomClipper<Path> {
 //게시글, 팔로워, 팔로잉
 
 class _ProfileInfoRow extends StatelessWidget {
-  const _ProfileInfoRow({Key? key}) : super(key: key);
+  final userModel user;
+  const _ProfileInfoRow({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -164,11 +179,11 @@ class _ProfileInfoRow extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "0",
-                      style: TextStyle(
+                      user.totalPost.toString(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -187,11 +202,11 @@ class _ProfileInfoRow extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "11111",
-                      style: TextStyle(
+                      user.follower.toString(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -210,11 +225,11 @@ class _ProfileInfoRow extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "1",
-                      style: TextStyle(
+                      user.followee.toString(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
