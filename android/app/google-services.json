@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "575813559652-eef11t29e1of53mnird5mtihad8slg1t.apps.googleusercontent.com",
+              "client_id": "575813559652-9cun077m3fbuuk3beis1a3519gu6ob4m.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.diggin"
+                "bundle_id": "com.example.digginfront"
               }
             }
           ]
@@ -57,6 +57,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "575813559652-e81abserhg7lfmag0esq1d7co5jp7o95.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.digginfront",
+            "certificate_hash": "c2bbdc7d96071edaaba8986270cf0fc3fd1d1dea"
+          }
+        },
+        {
+          "client_id": "575813559652-g3okjel1svknr00ouqqdndvhrur3gei2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.digginfront",
+            "certificate_hash": "0b601fc300e3ad1a7bb27595f6385e710647e1d4"
+          }
+        },
         {
           "client_id": "575813559652-9smki7c3g9hfnhch3ujp3jaahh1pevt3.apps.googleusercontent.com",
           "client_type": 3
@@ -75,10 +91,10 @@
               "client_type": 3
             },
             {
-              "client_id": "575813559652-eef11t29e1of53mnird5mtihad8slg1t.apps.googleusercontent.com",
+              "client_id": "575813559652-9cun077m3fbuuk3beis1a3519gu6ob4m.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.diggin"
+                "bundle_id": "com.example.digginfront"
               }
             }
           ]
