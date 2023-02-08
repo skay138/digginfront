@@ -1,5 +1,6 @@
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
+import 'package:digginfront/screens/loginPage.dart';
 import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,14 @@ class _SignUpState extends State<SignUp> {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
                           color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
