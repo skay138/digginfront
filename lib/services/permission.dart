@@ -10,6 +10,7 @@ Future getPermission() async {
   } else if (cameraStatus.isDenied) {
     // 카메라 권한 요청
     Permission.camera.request();
+    openAppSettings();
   }
   var mediaStatus = await Permission.photos.status;
   if (mediaStatus.isGranted) {
