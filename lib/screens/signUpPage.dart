@@ -1,5 +1,6 @@
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
+import 'package:digginfront/screens/imageUploadPage.dart';
 import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -155,6 +156,17 @@ class _SignUpState extends State<SignUp> {
                             setInfo: setInfo,
                             infoType: 'gender',
                           ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        const ImageUpload(),
+                                  ),
+                                );
+                              },
+                              child: const Text('이미지 선택')),
                         ],
                       ),
                     ),

@@ -1,8 +1,8 @@
 import 'package:permission_handler/permission_handler.dart';
 
 Future getPermission() async {
-  var permissionCamera = false;
-  var permissionMedia = false;
+  bool permissionCamera = false;
+  bool permissionMedia = false;
 
   var cameraStatus = await Permission.camera.status;
   if (cameraStatus.isGranted) {
@@ -11,12 +11,12 @@ Future getPermission() async {
     // 카메라 권한 요청
     Permission.camera.request();
   }
-  var mediaStatus = await Permission.mediaLibrary.status;
+  var mediaStatus = await Permission.photos.status;
   if (mediaStatus.isGranted) {
     permissionMedia = true;
   } else if (cameraStatus.isDenied) {
     // 미디어 권한 요청
-    Permission.mediaLibrary.request();
+    Permission.photos.request();
     openAppSettings();
   }
 }
