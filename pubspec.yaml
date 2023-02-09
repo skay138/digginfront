@@ -40,6 +40,8 @@ dependencies:
   http: ^0.13.5
   #sign in page
   intl: ^0.17.0
+  #권한요청
+  permission_handler: ^10.2.0
 
   #Google icon
   font_awesome_flutter: ^10.3.0

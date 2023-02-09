@@ -1,11 +1,13 @@
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
+import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
+import 'package:digginfront/services/permission.dart';
 
 class SignUp extends StatefulWidget {
   userModel user;
@@ -28,10 +30,18 @@ class _SignUpState extends State<SignUp> {
     'is_active': true,
     'is_signed': true,
   };
+  // Map 유저안에 정보 넣어줌
   void setInfo(String infoType, info) {
     setState(() {
       userInfo[infoType] = info;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 권한 요청
+    getPermission();
   }
 
   @override
@@ -50,13 +60,18 @@ class _SignUpState extends State<SignUp> {
         leading: IconButton(
             onPressed: user.is_signed
                 ? () {
+                    // 가입된 유저면 회원가입 페이지 스킵
                     Navigator.pop(context);
                   }
                 : () async {
+                    // 가입된 유저가 아니라면
                     final provider = Provider.of<GoogleSignInProvider>(context,
                         listen: false);
-                    await FirebaseAuth.instance.signOut();
-                    await provider.googleLogout();
+                    // 순차적으로 실행될 필요 없어서 await하나에 넣어줌
+                    await Future.wait([
+                      FirebaseAuth.instance.signOut(),
+                      provider.googleLogout(),
+                    ]);
                   },
             icon: const Icon(
               Icons.arrow_back_ios,
@@ -78,6 +93,7 @@ class _SignUpState extends State<SignUp> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: user.is_signed
+                          // 이미 가입된 유저라면 가입페이지가 아닌 수정 페이지로 재활용
                           ? [
                               const Text(
                                 "수정할 정보를 입력해주세요!",
@@ -93,6 +109,7 @@ class _SignUpState extends State<SignUp> {
                                 height: 30,
                               )
                             ]
+                          // 신규 회원이면 회원가입 문구
                           : [
                               const Text(
                                 "처음 이용하시는군요!",
@@ -155,7 +172,20 @@ class _SignUpState extends State<SignUp> {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {},
+                          onPressed: () {
+                            // 유저정보 업데이트
+                            // 함수 이곳에 넣어야함
+
+                            // 메인페이지로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainPage(
+                                  user: user,
+                                ),
+                              ),
+                            );
+                          },
                           color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),

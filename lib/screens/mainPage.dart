@@ -1,118 +1,50 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
-import 'package:digginfront/provider/google_sign_in.dart';
 import 'package:digginfront/screens/feedPage.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
-import 'package:digginfront/widgets/recent_post.dart';
-import 'package:digginfront/widgets/recommended_post.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:digginfront/widgets/bottomBar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:digginfront/screens/homePage.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   userModel user;
-
-  final Future<List<postModel>> posts = Post.getRecommendedPost();
 
   MainPage({super.key, required this.user});
 
   @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  final Future<List<postModel>> posts = Post.getRecommendedPost();
+
+  // 탭 초기값, state에 따라 화면 보여줌
+  String tabState = 'home';
+  // 상속용 set함수
+  void setTabState(String tab) {
+    setState(() {
+      tabState = tab;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black, Colors.white],
-              stops: [0.3, 1]),
+      body: {
+        // Map type으로 각 페이지를 import 해옴
+        'home': const HomePage(),
+        'feed': const FeedPage(),
+        // 'upload': const UploadPage(), upload는 push
+        'profile': ProfilePage(
+          user: widget.user,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: (() {}),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Text(
-                          'DIGGIN',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black),
-                      onPressed: () {
-                        final provider = Provider.of<GoogleSignInProvider>(
-                            context,
-                            listen: false);
-                        FirebaseAuth.instance.signOut();
-                        provider.googleLogout();
-                      },
-                      child: const Text(
-                        'LOGOUT',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600),
-                      )),
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              RecommendedPost(),
-              const SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Recent Posts',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => const FeedPage(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.calendar_view_month_sharp)),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: RecentPost(
-                  number: 3,
-                  page: 1,
-                ),
-              ),
-            ],
-          ),
-        ),
+      }[tabState],
+      bottomNavigationBar: BottomBar(
+        tabState: tabState,
+        setTabState: setTabState,
       ),
+      /*
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(
@@ -152,7 +84,7 @@ class MainPage extends StatelessWidget {
             label: '마이페이지',
           ),
         ],
-      ),
+      ), */
     );
   }
 }
