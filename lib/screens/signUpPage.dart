@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
 import 'package:digginfront/services/permission.dart';
+import 'dart:io';
 
 class SignUp extends StatefulWidget {
   userModel user;
@@ -31,6 +32,15 @@ class _SignUpState extends State<SignUp> {
     'is_active': true,
     'is_signed': true,
   };
+  // 이미지 관리
+  File? profileImage;
+  File? backgroundImage;
+  void setImage(File? image, File uploadedImage) {
+    setState(() {
+      image = uploadedImage;
+    });
+  }
+
   // Map 유저안에 정보 넣어줌
   void setInfo(String infoType, info) {
     setState(() {
@@ -162,11 +172,28 @@ class _SignUpState extends State<SignUp> {
                                   context,
                                   MaterialPageRoute<void>(
                                     builder: (BuildContext context) =>
-                                        const ImageUpload(),
+                                        ImageUpload(
+                                      whichImage: profileImage,
+                                      setImage: setImage,
+                                    ),
                                   ),
                                 );
                               },
-                              child: const Text('이미지 선택')),
+                              child: const Text('프로필 이미지 선택')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        ImageUpload(
+                                      whichImage: backgroundImage,
+                                      setImage: setImage,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text('배경 이미지 선택')),
                         ],
                       ),
                     ),

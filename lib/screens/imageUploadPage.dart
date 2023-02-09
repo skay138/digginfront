@@ -3,15 +3,16 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({super.key});
-
+  const ImageUpload(
+      {super.key, required this.whichImage, required this.setImage});
+  final File? whichImage;
+  final Function setImage;
   @override
   State<ImageUpload> createState() => _ImageUploadState();
 }
 
 class _ImageUploadState extends State<ImageUpload> {
   final picker = ImagePicker();
-  File? selectedImage;
 
   imageFromGallery() async {
     var image = await picker.pickImage(
@@ -19,9 +20,7 @@ class _ImageUploadState extends State<ImageUpload> {
       imageQuality: 30,
     );
     if (image != null) {
-      setState(() {
-        selectedImage = File(image.path);
-      });
+      widget.setImage(widget.whichImage, File(image.path));
     }
   }
 
@@ -31,9 +30,7 @@ class _ImageUploadState extends State<ImageUpload> {
       imageQuality: 30,
     );
     if (image != null) {
-      setState(() {
-        selectedImage = File(image.path);
-      });
+      widget.setImage(widget.whichImage, File(image.path));
     }
   }
 
@@ -41,14 +38,18 @@ class _ImageUploadState extends State<ImageUpload> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          (selectedImage != null)
-              ? Image.file(
-                  selectedImage!,
-                  width: 200,
-                )
-              : const Text('이미지를 선택해주세요'),
+          Container(
+            child: (widget.whichImage != null)
+                ? Image.file(
+                    widget.whichImage!,
+                    width: 200,
+                  )
+                : const Text('이미지를 선택해주세요'),
+          ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: imageFromCamera,
