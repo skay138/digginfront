@@ -4,16 +4,16 @@ import 'package:digginfront/widgets/post_grid_view.dart';
 import 'package:flutter/material.dart';
 
 class FeedPage extends StatelessWidget {
-  const FeedPage({
-    super.key,
-  });
+  String uid;
+  FeedPage({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
     int number = 8, page = 1;
 
-    late final Future<List<postModel>> feedpost =
-        Post.getRecentPosts(number, page);
+    late final Future<List<postModel>> feedpost = (uid != 'recent')
+        ? Post.getMyFeed(uid)
+        : Post.getRecentPosts(number, page);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -22,9 +22,9 @@ class FeedPage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            const Text(
-              'FEED',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+            Text(
+              (uid != 'recent') ? 'FEED' : 'RECENT POSTS',
+              style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
             ),
             PostGridView(
               posts: feedpost,

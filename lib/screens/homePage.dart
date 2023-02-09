@@ -86,7 +86,9 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (BuildContext context) => const FeedPage(),
+                          builder: (BuildContext context) => FeedPage(
+                            uid: 'recent',
+                          ),
                         ),
                       );
                     },

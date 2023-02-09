@@ -34,7 +34,9 @@ class _MainPageState extends State<MainPage> {
       body: {
         // Map type으로 각 페이지를 import 해옴
         'home': const HomePage(),
-        'feed': const FeedPage(),
+        'feed': FeedPage(
+          uid: widget.user.uid,
+        ),
         // 'upload': const UploadPage(), upload는 push
         'profile': ProfilePage(
           user: widget.user,
