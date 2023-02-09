@@ -44,47 +44,6 @@ class _MainPageState extends State<MainPage> {
         tabState: tabState,
         setTabState: setTabState,
       ),
-      /*
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.text_snippet),
-            label: '',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const FeedPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.feed)),
-            label: '피드',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => ProfilePage(
-                        user: user,
-                      ),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.people)),
-            label: '마이페이지',
-          ),
-        ],
-      ), */
     );
   }
 }
