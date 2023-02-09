@@ -89,6 +89,23 @@ class Post {
       throw Error();
     }
   }
+
+  static Future<List<postModel>> getMyFeed(String uid) async {
+    String recentPosts = "myfeed?uid=$uid";
+    List<postModel> postinstances = [];
+    final url = Uri.parse('$baseUrl$recentPosts');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> posts = jsonDecode(response.body);
+      for (var post in posts) {
+        final instance = postModel.fromJson(post);
+        postinstances.add(instance);
+      }
+      return postinstances;
+    } else {
+      throw Error();
+    }
+  }
 }
 
 class Comment {
