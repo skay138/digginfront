@@ -2,6 +2,7 @@ import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/feedPage.dart';
 import 'package:digginfront/screens/profilePage.dart';
+import 'package:digginfront/screens/searchPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/bottomBar.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _MainPageState extends State<MainPage> {
           uid: widget.user.uid,
         ),
         // 'upload': const UploadPage(), upload는 push
+        'search': const SearchPage(),
         'profile': ProfilePage(
           user: widget.user,
         ),

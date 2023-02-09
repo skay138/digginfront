@@ -41,6 +41,11 @@ class _BottomBarState extends State<BottomBar> {
             label: 'upload',
           ),
           bottomBarItem(
+            'search',
+            const Icon(Icons.search),
+            const Icon(Icons.search_outlined),
+          ),
+          bottomBarItem(
             'profile',
             const Icon(Icons.person),
             const Icon(Icons.person_outlined),
