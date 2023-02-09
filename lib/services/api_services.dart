@@ -20,7 +20,7 @@ class Account {
       final profile = jsonDecode(response.body);
       return userModel.fromJson(profile);
     } else {
-      throw Error();
+      print(response);
     }
   }
 
