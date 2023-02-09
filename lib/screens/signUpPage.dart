@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
+import 'package:digginfront/services/permission.dart';
 
 class SignUp extends StatefulWidget {
   userModel user;
@@ -34,6 +35,13 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       userInfo[infoType] = info;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 권한 요청
+    getPermission();
   }
 
   @override
