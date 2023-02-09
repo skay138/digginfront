@@ -3,9 +3,10 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload(
-      {super.key, required this.whichImage, required this.setImage});
-  final File? whichImage;
+  const ImageUpload({
+    super.key,
+    required this.setImage,
+  });
   final Function setImage;
   @override
   State<ImageUpload> createState() => _ImageUploadState();
@@ -13,6 +14,7 @@ class ImageUpload extends StatefulWidget {
 
 class _ImageUploadState extends State<ImageUpload> {
   final picker = ImagePicker();
+  File? previewImage;
 
   imageFromGallery() async {
     var image = await picker.pickImage(
@@ -20,7 +22,9 @@ class _ImageUploadState extends State<ImageUpload> {
       imageQuality: 30,
     );
     if (image != null) {
-      widget.setImage(widget.whichImage, File(image.path));
+      setState(() {
+        previewImage = File(image.path);
+      });
     }
   }
 
@@ -30,7 +34,9 @@ class _ImageUploadState extends State<ImageUpload> {
       imageQuality: 30,
     );
     if (image != null) {
-      widget.setImage(widget.whichImage, File(image.path));
+      setState(() {
+        previewImage = File(image.path);
+      });
     }
   }
 
@@ -41,9 +47,9 @@ class _ImageUploadState extends State<ImageUpload> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            child: (widget.whichImage != null)
+            child: (previewImage != null)
                 ? Image.file(
-                    widget.whichImage!,
+                    previewImage!,
                     width: 200,
                   )
                 : const Text('이미지를 선택해주세요'),
@@ -61,11 +67,25 @@ class _ImageUploadState extends State<ImageUpload> {
               ),
             ],
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  if (previewImage != null) {
+                    widget.setImage(previewImage);
+                  }
+                  Navigator.of(context).pop(true);
+                },
+                icon: const Icon(Icons.check),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close),
+              ),
+            ],
           )
         ],
       ),

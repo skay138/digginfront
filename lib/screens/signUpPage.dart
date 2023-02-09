@@ -35,9 +35,15 @@ class _SignUpState extends State<SignUp> {
   // 이미지 관리
   File? profileImage;
   File? backgroundImage;
-  void setImage(File? image, File uploadedImage) {
+  void setProfileImage(File uploadedImage) {
     setState(() {
-      image = uploadedImage;
+      profileImage = uploadedImage;
+    });
+  }
+
+  void setBackgroundImage(File uploadedImage) {
+    setState(() {
+      backgroundImage = uploadedImage;
     });
   }
 
@@ -144,10 +150,26 @@ class _SignUpState extends State<SignUp> {
                               )
                             ],
                     ),
+                    // 이 아래로 정보 입력
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              (profileImage != null)
+                                  ? Image.file(
+                                      profileImage!,
+                                      width: 60,
+                                      height: 60,
+                                    )
+                                  : const Icon(
+                                      Icons.person,
+                                      size: 60,
+                                    )
+                            ],
+                          ),
                           makeInput(
                             label: "닉네임(필수)",
                             setInfo: setInfo,
@@ -173,11 +195,10 @@ class _SignUpState extends State<SignUp> {
                                   MaterialPageRoute<void>(
                                     builder: (BuildContext context) =>
                                         ImageUpload(
-                                      whichImage: profileImage,
-                                      setImage: setImage,
+                                      setImage: setProfileImage,
                                     ),
                                   ),
-                                );
+                                ).then((res) => setState(() {}));
                               },
                               child: const Text('프로필 이미지 선택')),
                           TextButton(
@@ -187,8 +208,7 @@ class _SignUpState extends State<SignUp> {
                                   MaterialPageRoute<void>(
                                     builder: (BuildContext context) =>
                                         ImageUpload(
-                                      whichImage: backgroundImage,
-                                      setImage: setImage,
+                                      setImage: setBackgroundImage,
                                     ),
                                   ),
                                 );
