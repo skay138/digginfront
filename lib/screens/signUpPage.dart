@@ -120,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 50,
+                                height: 30,
                               ),
                             ]
                           // 신규 회원이면 회원가입 문구
