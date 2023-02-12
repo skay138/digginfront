@@ -1,5 +1,7 @@
 import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
+import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/youtube.dart';
@@ -9,6 +11,10 @@ class PostDetail extends StatelessWidget {
   final postModel post;
 
   late final Future<List<commentModel>> comments = Comment.getComment(post.id);
+  late final userModel user;
+  void getuser() async {
+    user = await Account.getprofile(post.uid);
+  }
 
   PostDetail({
     super.key,
@@ -17,7 +23,6 @@ class PostDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String youtubeLinkId = post.youtube_link.split('v=')[1];
-
     DateTime nowTime = DateTime.now();
     DateTime postTime = DateTime.parse(post.date);
     Duration duration = nowTime.difference(postTime);
@@ -75,10 +80,23 @@ class PostDetail extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        post.nickname,
-                        style: const TextStyle(
-                          fontSize: 18,
+                      TextButton(
+                        onPressed: () {
+                          getuser();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => ProfilePage(
+                                user: user,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          post.nickname,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                       (duration.inHours < 24)
@@ -87,7 +105,7 @@ class PostDetail extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         post.title,
@@ -98,7 +116,6 @@ class PostDetail extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(
-                            alignment: Alignment.centerRight,
                             onPressed: () {
                               // post.userlike 처리
                             },
@@ -113,20 +130,24 @@ class PostDetail extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Text(
+                    post.content.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
                 ],
               ),
-              Text(
-                post.content.toString(),
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
               const SizedBox(
                 height: 30,
               ),
-              Text(post.youtube_data['desc']),
-              const SizedBox(
-                height: 30,
+              ExpansionTile(
+                title: const Text('음악 자세히'),
+                children: [
+                  Text(
+                    post.youtube_data['desc'],
+                  ),
+                ],
               ),
               Commentwidget(comments: comments)
             ],

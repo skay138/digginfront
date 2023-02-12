@@ -8,25 +8,34 @@ class Commentwidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("여기에 댓글페이지 작성하면 됩니다."),
-        FutureBuilder(
-          future: comments,
-          builder: (context, res) {
-            if (res.data?.isEmpty == true) {
-              return const Text('아직 댓글이 없어요!');
-            } else if (res.hasData) {
-              return Column(
-                children: [
-                  for (var comment in res.data!)
-                    DigginComment(comment: comment),
-                ],
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+        ExpansionTile(
+          title: const Text(
+            "댓글",
+            style: TextStyle(fontSize: 18),
+          ),
+          initiallyExpanded: true,
+          children: [
+            FutureBuilder(
+              future: comments,
+              builder: (context, res) {
+                if (res.data?.isEmpty == true) {
+                  return const Text('아직 댓글이 없어요!');
+                } else if (res.hasData) {
+                  return Column(
+                    children: [
+                      for (var comment in res.data!)
+                        DigginComment(comment: comment),
+                    ],
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -42,7 +51,7 @@ class DigginComment extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-          color: Colors.green.shade400,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -64,8 +73,8 @@ class DigginComment extends StatelessWidget {
               Text(comment.nickname),
               Text(
                 comment.content.toString(),
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
                     fontSize: 15,
                     fontWeight: FontWeight.w400),
               ),

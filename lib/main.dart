@@ -35,7 +35,7 @@ class App extends StatelessWidget {
               color: Color(0xff232b55),
             ),
           ),
-          cardColor: const Color(0xfff4eddb),
+          cardColor: const Color.fromARGB(255, 226, 247, 248),
           colorScheme: ColorScheme(
             onPrimary: Colors.black.withOpacity(0.7),
             onSecondary: const Color.fromARGB(255, 9, 46, 77),
