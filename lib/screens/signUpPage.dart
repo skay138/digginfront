@@ -301,19 +301,10 @@ Widget makeInput({label, obsureText = false, setInfo, infoType}) {
           setInfo(infoType, value);
         },
         obscureText: obsureText,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400)),
-        ),
       ),
       const SizedBox(
         height: 30,
-      )
+      ),
     ],
   );
 }
