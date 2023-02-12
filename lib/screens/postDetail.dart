@@ -14,10 +14,13 @@ class PostDetail extends StatelessWidget {
     super.key,
     required this.post,
   });
-
   @override
   Widget build(BuildContext context) {
     String youtubeLinkId = post.youtube_link.split('v=')[1];
+
+    DateTime nowTime = DateTime.now();
+    DateTime postTime = DateTime.parse(post.date);
+    Duration duration = nowTime.difference(postTime);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -56,13 +59,71 @@ class PostDetail extends StatelessWidget {
                 height: 20,
               ),
               Player(youtubeLinkId, post.youtube_data['title']),
-              Text(post.title),
-              Text(post.content.toString()),
-              Text(post.nickname),
-              Text(post.like_count.toString()),
-              Icon(post.userlike == 0 ? Icons.favorite_border : Icons.favorite),
-              Text(post.date),
-              Text(post.youtube_data['title']),
+              Text(
+                post.youtube_data['title'],
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        post.nickname,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      (duration.inHours < 24)
+                          ? Text('${duration.inHours} 시간 전')
+                          : Text('${duration.inDays} 일 전'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        post.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            alignment: Alignment.centerRight,
+                            onPressed: () {
+                              // post.userlike 처리
+                            },
+                            icon: Icon(post.userlike == 0
+                                ? Icons.favorite_border
+                                : Icons.favorite),
+                          ),
+                          Text(
+                            post.like_count.toString(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                post.content.toString(),
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
               Text(post.youtube_data['desc']),
               const SizedBox(
                 height: 30,
