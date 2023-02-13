@@ -35,9 +35,15 @@ class _SignUpState extends State<SignUp> {
   // 이미지 관리
   File? profileImage;
   File? backgroundImage;
-  void setImage(File? image, File uploadedImage) {
+  void setProfileImage(File uploadedImage) {
     setState(() {
-      image = uploadedImage;
+      profileImage = uploadedImage;
+    });
+  }
+
+  void setBackgroundImage(File uploadedImage) {
+    setState(() {
+      backgroundImage = uploadedImage;
     });
   }
 
@@ -114,11 +120,8 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 20,
-                              ),
-                              const SizedBox(
                                 height: 30,
-                              )
+                              ),
                             ]
                           // 신규 회원이면 회원가입 문구
                           : [
@@ -144,10 +147,68 @@ class _SignUpState extends State<SignUp> {
                               )
                             ],
                     ),
+                    // 이 아래로 정보 입력
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 2),
+                                      color: Colors.black,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: (profileImage != null)
+                                              ? Image.file(profileImage!).image
+                                              : (user.image != null)
+                                                  ? NetworkImage(
+                                                      'http://diggin.kro.kr:4000/${user.image}')
+                                                  : const NetworkImage(
+                                                      'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
+                                    ),
+                                  )),
+                              Column(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                            builder: (BuildContext context) =>
+                                                ImageUpload(
+                                              setImage: setProfileImage,
+                                            ),
+                                          ),
+                                        ).then((res) => setState(() {}));
+                                      },
+                                      child: const Text('프로필 이미지 선택')),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                            builder: (BuildContext context) =>
+                                                ImageUpload(
+                                              setImage: setBackgroundImage,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text('배경 이미지 선택')),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
                           makeInput(
                             label: "닉네임(필수)",
                             setInfo: setInfo,
@@ -166,34 +227,7 @@ class _SignUpState extends State<SignUp> {
                             setInfo: setInfo,
                             infoType: 'gender',
                           ),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<void>(
-                                    builder: (BuildContext context) =>
-                                        ImageUpload(
-                                      whichImage: profileImage,
-                                      setImage: setImage,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text('프로필 이미지 선택')),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<void>(
-                                    builder: (BuildContext context) =>
-                                        ImageUpload(
-                                      whichImage: backgroundImage,
-                                      setImage: setImage,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text('배경 이미지 선택')),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -239,9 +273,6 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                   ],
                 ),
               ],
@@ -270,19 +301,10 @@ Widget makeInput({label, obsureText = false, setInfo, infoType}) {
           setInfo(infoType, value);
         },
         obscureText: obsureText,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400)),
-        ),
       ),
       const SizedBox(
         height: 30,
-      )
+      ),
     ],
   );
 }

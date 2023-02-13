@@ -33,7 +33,7 @@ class _BottomBarState extends State<BottomBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const UploadPage(),
+                      builder: (BuildContext context) => UploadPage(),
                     ),
                   );
                 },

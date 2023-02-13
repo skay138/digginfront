@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class DatePicker extends StatefulWidget {
   const DatePicker({Key? key, required this.setInfo, required this.infoType})
@@ -11,60 +11,82 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  String _selectedDate = '생일을 선택해주세요';
+  DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.centerLeft,
+      width: 600,
       padding: const EdgeInsets.symmetric(
-        vertical: 10,
+        vertical: 5,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            '생일',
-            style: TextStyle(fontSize: 15),
+          const SizedBox(
+            width: 300,
+            height: 40,
+            child: Text(
+              '생일',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
           ),
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: const Icon(
-                  Icons.date_range_outlined,
-                  size: 33,
-                ),
-                onPressed: () => _selectDate(context),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: SizedBox(
+              height: 100,
+              width: 300,
+              child: ScrollDatePicker(
+                selectedDate: _selectedDate,
+                locale: const Locale('ko'),
+                scrollViewOptions: const DatePickerScrollViewOptions(
+                    year: ScrollViewDetailOptions(
+                      label: '년',
+                      margin: EdgeInsets.only(right: 40),
+                    ),
+                    month: ScrollViewDetailOptions(
+                      label: '월',
+                      margin: EdgeInsets.only(right: 40),
+                    ),
+                    day: ScrollViewDetailOptions(
+                      label: '일',
+                    )),
+                onDateTimeChanged: (DateTime value) {
+                  setState(() {
+                    _selectedDate = value;
+                  });
+                  widget.setInfo(widget.infoType, _selectedDate);
+                },
               ),
-              Text(
-                _selectedDate,
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Future _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-        builder: (context, child) {
-          return Theme(
-            data: ThemeData.dark().copyWith(
-              colorScheme: const ColorScheme.dark(),
-              dialogBackgroundColor: const ColorScheme.dark().background,
-            ),
-            child: child!,
-          );
-        });
-    if (selected != null) {
-      setState(() {
-        _selectedDate = (DateFormat('y년 M월 d일')).format(selected);
-      });
-      widget.setInfo(widget.infoType, _selectedDate);
-    }
-  }
+  // Future _selectDate(BuildContext context) async {
+  //   final DateTime? selected = await showDatePicker(
+  //       context: context,
+  //       initialDate: DateTime.now(),
+  //       firstDate: DateTime(1900),
+  //       lastDate: DateTime.now(),
+  //       builder: (context, child) {
+  //         return Theme(
+  //           data: ThemeData.dark().copyWith(
+  //             colorScheme: const ColorScheme.dark(),
+  //             dialogBackgroundColor: const ColorScheme.dark().background,
+  //           ),
+  //           child: child!,
+  //         );
+  //       });
+  //   if (selected != null) {
+  //     setState(() {
+  //       _selectedDate = (DateFormat('y년 M월 d일')).format(selected);
+  //     });
+  //     widget.setInfo(widget.infoType, _selectedDate);
+  //   }
+  // }
 }

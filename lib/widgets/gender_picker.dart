@@ -57,7 +57,6 @@ class _GenderPickerState extends State<GenderPicker> {
               ),
             ],
           ),
-          const SizedBox(height: 80),
         ],
       ),
     );
