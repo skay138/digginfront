@@ -66,6 +66,23 @@ class Account {
       throw Error();
     }
   }
+
+  static Future<List<userModel>> getFollow(String uid, String type) async {
+    String follow = "follow?$type=$uid";
+    List<userModel> userinstances = [];
+    final url = Uri.parse('$baseUrl$follow');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> users = jsonDecode(response.body);
+      for (var user in users) {
+        final instance = userModel.fromJson(user);
+        userinstances.add(instance);
+      }
+      return userinstances;
+    } else {
+      throw Error();
+    }
+  }
 }
 
 class Post {

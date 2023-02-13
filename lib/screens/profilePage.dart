@@ -1,5 +1,6 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/screens/followPage.dart';
 import 'package:digginfront/screens/signUpPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/post_grid_view.dart';
@@ -217,51 +218,103 @@ class _ProfileInfoRow extends StatelessWidget {
               )
             ],
           ),
-          Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      user.follower.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                  pageBuilder: (context, anmation, secondaryAnimation) =>
+                      FollowPage(
+                    uid: user.uid,
+                    follower: true,
+                  ),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        user.follower.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    "Follower",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
-                ],
-              )
-            ],
+                    Text(
+                      "Follower",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
-          Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      user.followee.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                  pageBuilder: (context, anmation, secondaryAnimation) =>
+                      FollowPage(
+                    uid: user.uid,
+                    follower: false,
+                  ),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        user.followee.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    "Following",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
-                ],
-              )
-            ],
+                    Text(
+                      "Following",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    )
+                  ],
+                )
+              ],
+            ),
           )
         ],
       ),

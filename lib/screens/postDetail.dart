@@ -13,7 +13,7 @@ class PostDetail extends StatelessWidget {
   late final Future<List<commentModel>> comments = Comment.getComment(post.id);
   late final userModel user;
   void getuser() async {
-    user = await Account.getprofile(post.uid);
+    user = await Account.getProfile(post.uid);
   }
 
   PostDetail({
