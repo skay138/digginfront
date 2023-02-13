@@ -24,7 +24,7 @@ class Account {
     }
   }
 
-  static Future<userModel> getprofile(String uid) async {
+  static Future<userModel> getProfile(String uid) async {
     final url = Uri.parse('$baseUrl?uid=$uid');
     final response = await http.get(url);
     if (response.statusCode == 200) {
@@ -32,6 +32,39 @@ class Account {
       return userModel.fromJson(profile);
     }
     throw Error();
+  }
+
+  static Future<List<userModel>> getSearchUser(String nickname) async {
+    String usersearch = "search?nickname=$nickname";
+    List<userModel> userinstances = [];
+    final url = Uri.parse('$baseUrl$usersearch');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> users = jsonDecode(response.body);
+      for (var user in users) {
+        final instance = userModel.fromJson(user);
+        userinstances.add(instance);
+      }
+      return userinstances;
+    } else {
+      throw Error();
+    }
+  }
+
+  static Future<String> isFollowing(String follower, String followee) async {
+    String follow = "follow?follower=$follower&followee=$followee";
+    final url = Uri.parse('$baseUrl$follow');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['status'] == 'true') {
+        return 'true';
+      } else {
+        return 'false';
+      }
+    } else {
+      throw Error();
+    }
   }
 }
 
@@ -103,6 +136,24 @@ class Post {
       }
       return postinstances;
     } else {
+      throw Error();
+    }
+  }
+
+  static Future<List<postModel>> searchPost(String keyword, String type) async {
+    String search = "search?$type=$keyword";
+    List<postModel> postinstances = [];
+    final url = Uri.parse('$baseUrl$search');
+    final response = await http.get(url);
+    try {
+      final List<dynamic> posts = jsonDecode(response.body);
+      for (var post in posts) {
+        final instance = postModel.fromJson(post);
+        postinstances.add(instance);
+      }
+      return postinstances;
+    } catch (e) {
+      print(e);
       throw Error();
     }
   }

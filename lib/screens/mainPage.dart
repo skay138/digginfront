@@ -32,6 +32,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: {
         // Map type으로 각 페이지를 import 해옴
         'home': const HomePage(),

@@ -3,6 +3,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/signUpPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/post_grid_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -53,6 +54,9 @@ class _TopPortion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    final isFollowing = Account.isFollowing(currentUserUid, user.uid);
+
     return Stack(
       children: [
         ClipPath(
@@ -81,22 +85,23 @@ class _TopPortion extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 2),
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: (user.image != null)
-                                  ? NetworkImage(
-                                      'http://diggin.kro.kr:4000/${user.image}')
-                                  : const NetworkImage(
-                                      'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
-                        ),
-                      )),
+                    width: 100,
+                    height: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: (user.image != null)
+                                ? NetworkImage(
+                                    'http://diggin.kro.kr:4000/${user.image}')
+                                : const NetworkImage(
+                                    'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
+                      ),
+                    ),
+                  ),
                 ),
                 Text(
                   user.nickname,
@@ -122,18 +127,33 @@ class _TopPortion extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 17, fontWeight: FontWeight.w400),
                   ),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => SignUp(
-                              user: user,
-                            ),
-                          ),
-                        );
-                      },
-                      child: const Icon(Icons.edit))
+                  (user.uid == currentUserUid)
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) => SignUp(
+                                  user: user,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.edit,
+                            size: 30,
+                          ))
+                      : FutureBuilder(
+                          future: isFollowing,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == 'true') {
+                              return const Icon(
+                                  Icons.remove_circle_outline_sharp);
+                            } else {
+                              return const Icon(Icons.add_circle);
+                            }
+                          },
+                        ),
                 ],
               ),
             ),
