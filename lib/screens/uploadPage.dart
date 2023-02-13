@@ -1,10 +1,11 @@
-import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/services/api_services.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  late postModel post;
+  //late postModel post;
   late userModel user;
+
   UploadPage({super.key});
 
   @override
@@ -39,57 +40,61 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "업로드 내용을 입력해주세요",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "업로드 내용을 입력해주세요",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            makeInput(
-              label: "유튜브 링크",
-              setInfo: setInfo,
-              infoType: 'youtube_link',
-            ),
-            makeInput(
-              label: "제목",
-              setInfo: setInfo,
-              infoType: 'title',
-            ),
-            makeInput(
-              label: "내용",
-              setInfo: setInfo,
-              infoType: 'content',
-            ),
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    '확인',
-                    style: TextStyle(fontSize: 40),
+              const SizedBox(
+                height: 30,
+              ),
+              makeInput(
+                label: "유튜브 링크",
+                setInfo: setInfo,
+                infoType: 'youtube_link',
+              ),
+              makeInput(
+                label: "제목",
+                setInfo: setInfo,
+                infoType: 'title',
+              ),
+              makeInput(
+                label: "내용",
+                setInfo: setInfo,
+                infoType: 'content',
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Post.postPost(postInfo);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      '확인',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    '닫기',
-                    style: TextStyle(fontSize: 40),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      '닫기',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -57,7 +57,6 @@ class _TopPortion extends StatelessWidget {
   Widget build(BuildContext context) {
     final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     final isFollowing = Account.isFollowing(currentUserUid, user.uid);
-
     return Stack(
       children: [
         ClipPath(

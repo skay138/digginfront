@@ -157,6 +157,30 @@ class Post {
     }
   }
 
+  static Future<postModel> postPost(Map<String, dynamic> postInfo) async {
+    final url = Uri.parse(baseUrl);
+    final response = await http.post(
+      url,
+      body: <String, String>{
+        'id': postInfo['id'],
+        'uid': postInfo['uid'],
+        'title': postInfo['title'],
+        'content': postInfo['content'],
+        'youtube_link': postInfo['youtube_link'],
+        'nickname': postInfo['nickname'],
+        // 'like_count': 0,
+        // 'userlike': 0,
+        // 'date': '',
+        // 'youtube_data': {},
+      },
+    );
+    if (response.statusCode == 200) {
+      final resPost = jsonDecode(response.body);
+      return postModel.fromJson(resPost);
+    }
+    throw Error();
+  }
+
   static Future<List<postModel>> searchPost(String keyword, String type) async {
     String search = "search?$type=$keyword";
     List<postModel> postinstances = [];
