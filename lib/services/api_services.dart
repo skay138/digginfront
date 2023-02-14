@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class Account {
   static const String baseUrl = "http://diggin.kro.kr:4000/account/";
@@ -22,6 +24,35 @@ class Account {
     } else {
       print(response);
     }
+  }
+
+  static Future<String> profileUpdate(
+      Map<String, dynamic> userInfo, File? image, File? bgimage) async {
+    final url = Uri.parse(baseUrl);
+    final req = http.MultipartRequest('PUT', url);
+    req.fields['uid'] = userInfo['uid'];
+    req.fields['email'] = userInfo['email'];
+    req.fields['nickname'] = userInfo['nickname'];
+    req.fields['introduce'] = userInfo['introduce'];
+    req.fields['gender'] = userInfo['gender'];
+    req.fields['is_signed'] = 'True';
+    if (userInfo['birth'].runtimeType == DateTime) {
+      req.fields['birth'] = DateFormat('yyyy-MM-dd').format(userInfo['birth']);
+    }
+    if (image != null) {
+      req.files.add(await http.MultipartFile.fromPath('image', image.path));
+    }
+    if (bgimage != null) {
+      req.files.add(await http.MultipartFile.fromPath('image', bgimage.path));
+    }
+
+    final response = await req.send();
+    final result = await http.Response.fromStream(response);
+    if (result.statusCode == 200) {
+      final res = jsonDecode(result.body);
+      return res['status'];
+    }
+    throw Error();
   }
 
   static Future<userModel> getProfile(String uid) async {

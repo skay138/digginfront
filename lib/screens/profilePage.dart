@@ -1,7 +1,7 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/followPage.dart';
-import 'package:digginfront/screens/signUpPage.dart';
+import 'package:digginfront/screens/profileUpdate.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/post_grid_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';

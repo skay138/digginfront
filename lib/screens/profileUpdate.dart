@@ -2,6 +2,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/provider/google_sign_in.dart';
 import 'package:digginfront/screens/imageUploadPage.dart';
 import 'package:digginfront/screens/mainPage.dart';
+import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/gender_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +26,8 @@ class _SignUpState extends State<SignUp> {
     'email': '',
     'nickname': '',
     'introduce': '',
-    'image': '',
-    'bgimage': '',
     'gender': '',
-    'birth': '',
-    'is_active': true,
-    'is_signed': true,
+    'birth': ''
   };
   // 이미지 관리
   File? profileImage;
@@ -59,6 +56,12 @@ class _SignUpState extends State<SignUp> {
     super.initState();
     // 권한 요청
     getPermission();
+    setInfo('uid', widget.user.uid);
+    setInfo('email', widget.user.email);
+    setInfo('nickname', widget.user.nickname);
+    setInfo('introduce', widget.user.introduce);
+    setInfo('gender', widget.user.gender);
+    setInfo('birth', widget.user.birth);
   }
 
   @override
@@ -246,10 +249,8 @@ class _SignUpState extends State<SignUp> {
                           minWidth: double.infinity,
                           height: 60,
                           onPressed: () {
-                            // 유저정보 업데이트
-                            // 함수 이곳에 넣어야함
-
-                            // 메인페이지로 이동
+                            Account.profileUpdate(
+                                userInfo, profileImage, backgroundImage);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -1,6 +1,6 @@
 import 'package:digginfront/screens/loginPage.dart';
 import 'package:digginfront/screens/mainPage.dart';
-import 'package:digginfront/screens/signUpPage.dart';
+import 'package:digginfront/screens/profileUpdate.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
