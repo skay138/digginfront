@@ -17,7 +17,10 @@ class LoginStatusPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.white,
+            ));
           } else if (snapshot.hasData) {
             final Future<dynamic> django = Account.djangoLogin();
             return FutureBuilder(
@@ -34,7 +37,9 @@ class LoginStatusPage extends StatelessWidget {
                   }
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Colors.amber,
+                    ),
                   );
                 }
               },

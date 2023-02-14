@@ -12,8 +12,8 @@ class FeedPage extends StatelessWidget {
     int number = 8, page = 1;
 
     late final Future<List<postModel>> feedpost = (uid != 'recent')
-        ? Post.getMyFeed(uid)
-        : Post.getRecentPosts(number, page);
+        ? Posting.getMyFeed(uid)
+        : Posting.getRecentPosts(number, page);
 
     return Scaffold(
       body: SingleChildScrollView(

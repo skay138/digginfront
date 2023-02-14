@@ -11,10 +11,8 @@ class PostDetail extends StatelessWidget {
   final postModel post;
 
   late final Future<List<commentModel>> comments = Comment.getComment(post.id);
-  late final userModel user;
-  void getuser() async {
-    user = await Account.getProfile(post.uid);
-  }
+  late final Future<userModel> user = Account.getProfile(post.uid);
+  // final String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   PostDetail({
     super.key,
@@ -55,6 +53,10 @@ class PostDetail extends StatelessWidget {
                       child: Image.network(
                         post.youtube_data['thumb'],
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(
+                              'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061131_960_720.png');
+                        },
                       ),
                     ),
                   ),
@@ -80,24 +82,29 @@ class PostDetail extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          getuser();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => ProfilePage(
-                                user: user,
+                      FutureBuilder(
+                        future: user,
+                        builder: (context, snapshot) {
+                          return TextButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      ProfilePage(
+                                    user: snapshot.data!,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              post.nickname,
+                              style: const TextStyle(
+                                fontSize: 18,
                               ),
                             ),
                           );
                         },
-                        child: Text(
-                          post.nickname,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
                       ),
                       (duration.inHours < 24)
                           ? Text('${duration.inHours} 시간 전')

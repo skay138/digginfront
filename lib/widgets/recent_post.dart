@@ -8,7 +8,8 @@ class RecentPost extends StatelessWidget {
   final int page;
   RecentPost({super.key, required this.number, required this.page});
 
-  late final Future<List<postModel>> posts = Post.getRecentPosts(number, page);
+  late final Future<List<postModel>> posts =
+      Posting.getRecentPosts(number, page);
 
   @override
   Widget build(BuildContext context) {

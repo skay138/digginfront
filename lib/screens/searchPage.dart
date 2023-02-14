@@ -25,8 +25,8 @@ class _SearchPageState extends State<SearchPage> {
 
   controlSearching(str) async {
     setState(() {
-      searchTitleResult = Post.searchPost(str, 'title');
-      searchAuthorResult = Post.searchPost(str, 'author');
+      searchTitleResult = Posting.searchPost(str, 'title');
+      searchAuthorResult = Posting.searchPost(str, 'author');
       searchUserResult = Account.getSearchUser(str);
       searched = true;
     });

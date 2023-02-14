@@ -3,27 +3,20 @@ import 'package:digginfront/services/api_services.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  //late postModel post;
-  late userModel user;
+  userModel user;
 
-  UploadPage({super.key});
+  UploadPage({super.key, required this.user});
 
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
 
 class _UploadPageState extends State<UploadPage> {
-  Map<String, dynamic> postInfo = {
-    'id': 0,
+  Map<String, String> postInfo = {
     'uid': '',
     'title': '',
     'content': '',
-    'youtube_link': '',
-    'nickname': '',
-    'like_count': 0,
-    'userlike': 0,
-    'date': '',
-    'youtube_data': {},
+    'youtube_link': ''
   };
   void setInfo(String infoType, info) {
     setState(() {
@@ -34,6 +27,7 @@ class _UploadPageState extends State<UploadPage> {
   @override
   void initState() {
     super.initState();
+    setInfo('uid', widget.user.uid);
   }
 
   @override
@@ -74,7 +68,7 @@ class _UploadPageState extends State<UploadPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Post.postPost(postInfo);
+                      Posting.newPosting(postInfo);
                       Navigator.pop(context);
                     },
                     child: const Text(

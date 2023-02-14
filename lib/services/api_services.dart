@@ -85,7 +85,7 @@ class Account {
   }
 }
 
-class Post {
+class Posting {
   static const String baseUrl = "http://diggin.kro.kr:4000/post/";
 
   static Future<List<postModel>> getRecommendedPost() async {
@@ -157,26 +157,15 @@ class Post {
     }
   }
 
-  static Future<postModel> postPost(Map<String, dynamic> postInfo) async {
+  static Future<String> newPosting(Map<String, dynamic> postInfo) async {
     final url = Uri.parse(baseUrl);
     final response = await http.post(
       url,
-      body: <String, String>{
-        'id': postInfo['id'],
-        'uid': postInfo['uid'],
-        'title': postInfo['title'],
-        'content': postInfo['content'],
-        'youtube_link': postInfo['youtube_link'],
-        'nickname': postInfo['nickname'],
-        // 'like_count': 0,
-        // 'userlike': 0,
-        // 'date': '',
-        // 'youtube_data': {},
-      },
+      body: postInfo,
     );
     if (response.statusCode == 200) {
-      final resPost = jsonDecode(response.body);
-      return postModel.fromJson(resPost);
+      print(response.body);
+      return response.body;
     }
     throw Error();
   }

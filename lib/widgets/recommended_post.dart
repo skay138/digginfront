@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class RecommendedPost extends StatelessWidget {
   RecommendedPost({super.key});
 
-  final Future<List<postModel>> posts = Post.getRecommendedPost();
+  final Future<List<postModel>> posts = Posting.getRecommendedPost();
 
   @override
   Widget build(BuildContext context) {

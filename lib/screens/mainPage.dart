@@ -18,7 +18,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final Future<List<postModel>> posts = Post.getRecommendedPost();
+  final Future<List<postModel>> posts = Posting.getRecommendedPost();
 
   // 탭 초기값, state에 따라 화면 보여줌
   String tabState = 'home';
@@ -46,6 +46,7 @@ class _MainPageState extends State<MainPage> {
         ),
       }[tabState],
       bottomNavigationBar: BottomBar(
+        user: widget.user,
         tabState: tabState,
         setTabState: setTabState,
       ),

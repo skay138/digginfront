@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class ProfilePage extends StatelessWidget {
   final userModel user;
   ProfilePage({super.key, required this.user});
-  late final Future<List<postModel>> mypost = Post.getMyPosts(user.uid);
+  late final Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +237,7 @@ class _ProfileInfoRow extends StatelessWidget {
                   pageBuilder: (context, anmation, secondaryAnimation) =>
                       FollowPage(
                     uid: user.uid,
-                    follower: true,
+                    tab: 0,
                   ),
                 ),
               );
@@ -271,24 +271,23 @@ class _ProfileInfoRow extends StatelessWidget {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(0.0, 1.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, anmation, secondaryAnimation) =>
-                      FollowPage(
-                    uid: user.uid,
-                    follower: false,
-                  ),
-                ),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, anmation, secondaryAnimation) =>
+                        FollowPage(
+                          uid: user.uid,
+                          tab: 1,
+                        )),
               );
             },
             child: Row(
