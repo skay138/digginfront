@@ -29,6 +29,20 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  // 유저 정보 업데이트
+  void getUpdate() async {
+    final userModel userUpdated = await Account.getProfile(widget.user.uid);
+    setState(() {
+      widget.user = userUpdated;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
