@@ -9,9 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:digginfront/screens/homePage.dart';
 
 class MainPage extends StatefulWidget {
-  userModel user;
-
   MainPage({super.key, required this.user});
+  userModel user;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -29,22 +28,18 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  late userModel userUpdated;
   // 유저 정보 업데이트
   void getUpdate() async {
-    final userModel userUpdated = await Account.getProfile(widget.user.uid);
+    userUpdated = await Account.getProfile(widget.user.uid);
     setState(() {
       widget.user = userUpdated;
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-    getUpdate();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    getUpdate();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: {
