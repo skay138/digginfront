@@ -47,7 +47,7 @@ class App extends StatelessWidget {
             onError: Colors.red,
             onBackground: const Color.fromARGB(255, 175, 199, 219),
             surface: Colors.green,
-            onSurface: Colors.pink,
+            onSurface: const Color.fromARGB(255, 8, 1, 27),
           ),
         ),
         home: const LoginStatusPage(),

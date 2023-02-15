@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
 class GenderPicker extends StatefulWidget {
-  const GenderPicker({Key? key, required this.setInfo, required this.infoType})
-      : super(key: key);
+  const GenderPicker({
+    Key? key,
+    required this.setInfo,
+    required this.infoType,
+    required this.defaultGender,
+  }) : super(key: key);
   final Function setInfo;
   final String infoType;
+  final String defaultGender;
 
   @override
   State<GenderPicker> createState() => _GenderPickerState();
 }
 
 class _GenderPickerState extends State<GenderPicker> {
-  String _gender = 'M';
+  String _gender = 'defaultGender';
 
   @override
   Widget build(BuildContext context) {

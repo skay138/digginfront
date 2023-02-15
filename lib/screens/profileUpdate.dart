@@ -56,21 +56,25 @@ class _SignUpState extends State<SignUp> {
     super.initState();
     // 권한 요청
     getPermission();
-    setInfo('uid', widget.user.uid);
-    setInfo('email', widget.user.email);
-    setInfo('nickname', widget.user.nickname);
-    setInfo('introduce', widget.user.introduce);
-    setInfo('gender', widget.user.gender);
-    setInfo('birth', widget.user.birth);
+
+    final user = widget.user;
+    setState(() {
+      userInfo['uid'] = user.uid;
+      userInfo['email'] = user.email;
+      userInfo['nickname'] = user.nickname;
+      userInfo['birth'] = user.birth;
+      userInfo['gender'] = user.gender;
+      userInfo['introduce'] = user.introduce;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
-    setState(() {
-      userInfo['uid'] = user.uid;
-      userInfo['email'] = user.email;
-    });
+    // setState(() {
+    //   userInfo['uid'] = user.uid;
+    //   userInfo['email'] = user.email;
+    // });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -216,11 +220,13 @@ class _SignUpState extends State<SignUp> {
                             label: "닉네임(필수)",
                             setInfo: setInfo,
                             infoType: 'nickname',
+                            defaultValue: user.nickname,
                           ),
                           makeInput(
                             label: "소개",
                             setInfo: setInfo,
                             infoType: 'introduce',
+                            defaultValue: user.introduce,
                           ),
                           DatePicker(
                             setInfo: setInfo,
@@ -229,6 +235,7 @@ class _SignUpState extends State<SignUp> {
                           GenderPicker(
                             setInfo: setInfo,
                             infoType: 'gender',
+                            defaultGender: userInfo['gender'].toString(),
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -263,14 +270,23 @@ class _SignUpState extends State<SignUp> {
                           color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
-                          child: const Text(
-                            "계속 진행",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                            ),
-                          ),
+                          child: user.is_signed
+                              ? const Text(
+                                  "수정 완료",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                  ),
+                                )
+                              : const Text(
+                                  "계속 진행",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -285,7 +301,7 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Widget makeInput({label, obsureText = false, setInfo, infoType}) {
+Widget makeInput({label, obsureText = false, setInfo, infoType, defaultValue}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -297,7 +313,8 @@ Widget makeInput({label, obsureText = false, setInfo, infoType}) {
       const SizedBox(
         height: 5,
       ),
-      TextField(
+      TextFormField(
+        initialValue: defaultValue,
         onChanged: (value) {
           setInfo(infoType, value);
         },
