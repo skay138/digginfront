@@ -8,12 +8,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  ProfilePage({super.key, required this.user});
+  const ProfilePage({super.key, required this.user});
   final userModel user;
 
-  late final Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
   @override
   Widget build(BuildContext context) {
+    Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

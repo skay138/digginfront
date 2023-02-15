@@ -1,6 +1,7 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/screens/postDetail.dart';
 import 'package:flutter/material.dart';
+import 'dart:core';
 
 class DigginPost extends StatelessWidget {
   final double size;

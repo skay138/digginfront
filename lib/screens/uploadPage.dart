@@ -3,20 +3,18 @@ import 'package:digginfront/services/api_services.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  userModel user;
-
   UploadPage({super.key, required this.user});
-
+  userModel user;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
 
 class _UploadPageState extends State<UploadPage> {
-  Map<String, String> postInfo = {
+  Map<String, dynamic> postInfo = {
     'uid': '',
     'title': '',
     'content': '',
-    'youtube_link': ''
+    'youtube_link': '',
   };
   void setInfo(String infoType, info) {
     setState(() {
