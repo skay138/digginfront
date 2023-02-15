@@ -8,10 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  final userModel user;
   ProfilePage({super.key, required this.user});
-  late final Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
+  final userModel user;
 
+  late final Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,9 +50,8 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _TopPortion extends StatelessWidget {
-  final userModel user;
-  const _TopPortion({Key? key, required this.user}) : super(key: key);
-
+  _TopPortion({Key? key, required this.user}) : super(key: key);
+  userModel user;
   @override
   Widget build(BuildContext context) {
     final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;

@@ -29,6 +29,7 @@ class _SignUpState extends State<SignUp> {
     'gender': '',
     'birth': ''
   };
+
   // 이미지 관리
   File? profileImage;
   File? backgroundImage;
@@ -71,10 +72,6 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
-    // setState(() {
-    //   userInfo['uid'] = user.uid;
-    //   userInfo['email'] = user.email;
-    // });
 
     return Scaffold(
       backgroundColor: Colors.white,

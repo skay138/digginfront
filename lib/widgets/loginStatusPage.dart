@@ -27,7 +27,7 @@ class LoginStatusPage extends StatelessWidget {
               future: django,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  print(snapshot.data!.is_signed);
+                  //print(snapshot.data!.is_signed);
                   if (snapshot.data!.is_signed == true) {
                     return MainPage(user: snapshot.data);
                   } else {
@@ -38,7 +38,7 @@ class LoginStatusPage extends StatelessWidget {
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.amber,
+                      color: Color.fromARGB(255, 9, 16, 51),
                     ),
                   );
                 }
