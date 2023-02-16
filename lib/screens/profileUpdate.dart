@@ -228,11 +228,12 @@ class _SignUpState extends State<SignUp> {
                           DatePicker(
                             setInfo: setInfo,
                             infoType: 'birth',
+                            defaultDate: DateTime.parse(user.birth.toString()),
                           ),
                           GenderPicker(
                             setInfo: setInfo,
                             infoType: 'gender',
-                            defaultGender: userInfo['gender'].toString(),
+                            defaultGender: userInfo['gender'],
                           ),
                           const SizedBox(height: 20),
                         ],

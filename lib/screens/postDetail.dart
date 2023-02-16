@@ -6,6 +6,7 @@ import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PostDetail extends StatelessWidget {
   final postModel post;
@@ -25,7 +26,29 @@ class PostDetail extends StatelessWidget {
     DateTime postTime = DateTime.parse(post.date);
     Duration duration = nowTime.difference(postTime);
 
-    print(post.userlike);
+    // 복사완료 표시 함수
+    void _showDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pop(context);
+          });
+
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            content: const SizedBox(
+              height: 200,
+              child: Center(
+                  child: SizedBox(
+                child: Text('복사되었습니다.'),
+              )),
+            ),
+          );
+        },
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -105,6 +128,7 @@ class PostDetail extends StatelessWidget {
                         },
                       ),
                       (duration.inHours < 24)
+                          // 1시간 이하일땐 분단위 띄워주게 할게요
                           ? Text('${duration.inHours} 시간 전')
                           : Text('${duration.inDays} 일 전'),
                     ],
@@ -143,13 +167,15 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              const ExpansionTile(
-                title: Text('음악 자세히'),
-                children: [
-                  Text(
-                    '여기에 링크?? 모름',
-                  ),
-                ],
+              TextButton(
+                onPressed: () {
+                  String youtubeLink = post.youtube_link;
+                  Clipboard.setData(
+                    ClipboardData(text: 'https://youtu.be/$youtubeLink'),
+                  );
+                  _showDialog();
+                },
+                child: const Text('유튜브 링크 복사'),
               ),
               Commentwidget(comments: comments)
             ],
