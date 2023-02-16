@@ -121,9 +121,12 @@ class Posting {
 
   static Future<List<postModel>> getRecommendedPost() async {
     const String recommended = "search?recommended=5";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recommended');
-    final response = await http.get(url);
+    final response = await http.get(url, headers: auth);
     try {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -139,9 +142,12 @@ class Posting {
 
   static Future<List<postModel>> getRecentPosts(int number, int page) async {
     String recentPosts = "?number=$number&page=$page";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recentPosts');
-    final response = await http.get(url);
+    final response = await http.get(url, headers: auth);
     if (response.statusCode == 200) {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -156,9 +162,12 @@ class Posting {
 
   static Future<List<postModel>> getMyPosts(String uid) async {
     String recentPosts = "mypost?uid=$uid";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recentPosts');
-    final response = await http.get(url);
+    final response = await http.get(url, headers: auth);
     if (response.statusCode == 200) {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -173,9 +182,12 @@ class Posting {
 
   static Future<List<postModel>> getMyFeed(String uid) async {
     String recentPosts = "myfeed?uid=$uid";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$recentPosts');
-    final response = await http.get(url);
+    final response = await http.get(url, headers: auth);
     if (response.statusCode == 200) {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -204,9 +216,12 @@ class Posting {
 
   static Future<List<postModel>> searchPost(String keyword, String type) async {
     String search = "search?$type=$keyword";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
     List<postModel> postinstances = [];
     final url = Uri.parse('$baseUrl$search');
-    final response = await http.get(url);
+    final response = await http.get(url, headers: auth);
     try {
       final List<dynamic> posts = jsonDecode(response.body);
       for (var post in posts) {
@@ -240,5 +255,27 @@ class Comment {
       print(e);
       throw Error();
     }
+  }
+}
+
+class Taglike {
+  static const String baseUrl = 'http://diggin.kro.kr:4000/taglike';
+
+  static Future<String> postlike(String uid, int postId) async {
+    Map<String, dynamic> data = {'uid': uid, 'post_id': postId.toString()};
+    final url = Uri.parse('$baseUrl/postlike');
+    final res = await http.post(url, body: data);
+    final status = jsonDecode(res.body)['status'];
+
+    return status;
+  }
+
+  static Future<String> postunlike(String uid, int postId) async {
+    Map<String, dynamic> data = {'uid': uid, 'post_id': postId.toString()};
+    final url = Uri.parse('$baseUrl/postlike');
+    final res = await http.delete(url, body: data);
+    final status = jsonDecode(res.body)['status'];
+
+    return status;
   }
 }

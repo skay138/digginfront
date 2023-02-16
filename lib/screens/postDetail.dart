@@ -4,7 +4,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
-import 'package:digginfront/widgets/youtube.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PostDetail extends StatelessWidget {
@@ -12,7 +12,7 @@ class PostDetail extends StatelessWidget {
 
   late final Future<List<commentModel>> comments = Comment.getComment(post.id);
   late final Future<userModel> user = Account.getProfile(post.uid);
-  // final String currentUser = FirebaseAuth.instance.currentUser!.uid;
+  final String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   PostDetail({
     super.key,
@@ -24,6 +24,8 @@ class PostDetail extends StatelessWidget {
     DateTime nowTime = DateTime.now();
     DateTime postTime = DateTime.parse(post.date);
     Duration duration = nowTime.difference(postTime);
+
+    print(post.userlike);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -61,7 +63,7 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Player(youtubeLinkId, post.youtube_title),
+              // Player(youtubeLinkId, post.youtube_title),
               Text(
                 post.youtube_title,
                 style: const TextStyle(
@@ -118,13 +120,10 @@ class PostDetail extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              // post.userlike 처리
-                            },
-                            icon: Icon(post.userlike == 0
-                                ? Icons.favorite_border
-                                : Icons.favorite),
+                          postlikebtn(
+                            currentUser: currentUser,
+                            post: post,
+                            islike: post.userlike,
                           ),
                           Text(
                             post.like_count.toString(),
@@ -157,6 +156,55 @@ class PostDetail extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class postlikebtn extends StatefulWidget {
+  postlikebtn(
+      {super.key,
+      required this.currentUser,
+      required this.post,
+      required this.islike});
+
+  final String currentUser;
+  final postModel post;
+  bool islike;
+
+  @override
+  State<postlikebtn> createState() => _postlikebtnState();
+}
+
+class _postlikebtnState extends State<postlikebtn> {
+  @override
+  void initState() {
+    super.initState();
+    islike = widget.islike;
+    print(islike);
+  }
+
+  late bool islike;
+
+  @override
+  Widget build(BuildContext context) {
+    void postlikehanddle() async {
+      String res = islike
+          ? await Taglike.postunlike(widget.currentUser, widget.post.id)
+          : await Taglike.postlike(widget.currentUser, widget.post.id);
+
+      print(res);
+    }
+
+    return IconButton(
+      onPressed: () {
+        postlikehanddle();
+        setState(() {
+          islike = !islike;
+        });
+
+        // post.userlike 처리
+      },
+      icon: Icon(islike ? Icons.favorite : Icons.favorite_border),
     );
   }
 }
