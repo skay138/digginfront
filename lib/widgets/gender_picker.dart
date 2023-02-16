@@ -16,10 +16,9 @@ class GenderPicker extends StatefulWidget {
 }
 
 class _GenderPickerState extends State<GenderPicker> {
-  String _gender = 'defaultGender';
-
   @override
   Widget build(BuildContext context) {
+    String gender = widget.defaultGender;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
       child: Column(
@@ -37,12 +36,12 @@ class _GenderPickerState extends State<GenderPicker> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  setState(() => _gender = 'M');
-                  widget.setInfo(widget.infoType, _gender);
+                  setState(() => gender = 'M');
+                  widget.setInfo(widget.infoType, gender);
                 },
                 child: genderBtn(
                   'M',
-                  _gender,
+                  gender,
                   Colors.lightBlue.shade100,
                   const Icon(Icons.male_rounded),
                 ),
@@ -50,12 +49,12 @@ class _GenderPickerState extends State<GenderPicker> {
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: () {
-                  setState(() => _gender = 'F');
-                  widget.setInfo(widget.infoType, _gender);
+                  setState(() => gender = 'F');
+                  widget.setInfo(widget.infoType, gender);
                 },
                 child: genderBtn(
                   'F',
-                  _gender,
+                  gender,
                   Colors.pink.shade100,
                   const Icon(Icons.female_rounded),
                 ),

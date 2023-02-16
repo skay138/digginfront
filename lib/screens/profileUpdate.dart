@@ -232,7 +232,7 @@ class _SignUpState extends State<SignUp> {
                           GenderPicker(
                             setInfo: setInfo,
                             infoType: 'gender',
-                            defaultGender: userInfo['gender'].toString(),
+                            defaultGender: userInfo['gender'],
                           ),
                           const SizedBox(height: 20),
                         ],
