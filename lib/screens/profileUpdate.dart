@@ -203,7 +203,7 @@ class _SignUpState extends State<SignUp> {
                                               setImage: setBackgroundImage,
                                             ),
                                           ),
-                                        );
+                                        ).then((res) => setState(() {}));
                                       },
                                       child: const Text('배경 이미지 선택')),
                                 ],
@@ -253,6 +253,8 @@ class _SignUpState extends State<SignUp> {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
+
+                          /** 유저 정보 업데이트 */
                           onPressed: () {
                             Account.profileUpdate(
                                 userInfo, profileImage, backgroundImage);

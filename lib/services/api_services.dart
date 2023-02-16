@@ -43,7 +43,7 @@ class Account {
       req.files.add(await http.MultipartFile.fromPath('image', image.path));
     }
     if (bgimage != null) {
-      req.files.add(await http.MultipartFile.fromPath('image', bgimage.path));
+      req.files.add(await http.MultipartFile.fromPath('bgimage', bgimage.path));
     }
 
     final response = await req.send();
