@@ -1,5 +1,5 @@
 class postModel {
-  final int id, like_count, userlike;
+  final int id, like_count;
   final String title,
       uid,
       youtube_link,
@@ -8,6 +8,7 @@ class postModel {
       nickname,
       date;
   final String? content;
+  final bool userlike;
 
   postModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
