@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:digginfront/widgets/date_picker.dart';
 import 'package:digginfront/services/permission.dart';
+import 'package:digginfront/screens/profilePage.dart';
 import 'dart:io';
 
 class SignUp extends StatefulWidget {
@@ -178,6 +179,39 @@ class _SignUpState extends State<SignUp> {
                                                       'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
                                     ),
                                   )),
+                              SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: ClipPath(
+                                  clipper: TriangleClipper(),
+                                  child: (backgroundImage != null)
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image:
+                                                    Image.file(backgroundImage!)
+                                                        .image),
+                                          ),
+                                        )
+                                      : (user.bgimage != null)
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(
+                                                      'http://diggin.kro.kr:4000/${user.bgimage}'),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .background),
+                                            ),
+                                ),
+                              ),
                               Column(
                                 children: [
                                   TextButton(
@@ -254,7 +288,7 @@ class _SignUpState extends State<SignUp> {
                           minWidth: double.infinity,
                           height: 60,
 
-                          /** 유저 정보 업데이트 */
+                          /** 유저 정보 업데이트 실행*/
                           onPressed: () {
                             Account.profileUpdate(
                                 userInfo, profileImage, backgroundImage);
