@@ -28,12 +28,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  late userModel userUpdated;
+  late userModel refreshUser = widget.user;
   // 유저 정보 업데이트
   void getUpdate() async {
-    userUpdated = await Account.getProfile(widget.user.uid);
+    userModel userUpdated = await Account.getProfile(widget.user.uid);
     setState(() {
-      widget.user = userUpdated;
+      refreshUser = userUpdated;
     });
   }
 
@@ -46,12 +46,12 @@ class _MainPageState extends State<MainPage> {
         // Map type으로 각 페이지를 import 해옴
         'home': const HomePage(),
         'feed': FeedPage(
-          uid: widget.user.uid,
+          uid: refreshUser.uid,
         ),
         // 'upload': const UploadPage(), upload는 push
         'search': const SearchPage(),
         'profile': ProfilePage(
-          user: widget.user,
+          user: refreshUser,
         ),
       }[tabState],
       bottomNavigationBar: BottomBar(

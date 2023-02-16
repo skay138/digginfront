@@ -30,6 +30,46 @@ class _UploadPageState extends State<UploadPage> {
 
   @override
   Widget build(BuildContext context) {
+    void FlutterDialog() {
+      showDialog(
+          context: context,
+          //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              //Dialog Main Title
+              title: Column(
+                children: const <Widget>[
+                  Text("유튜브 링크에러"),
+                ],
+              ),
+              //
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text(
+                    "유튜브 링크가 맞는지 확인해주세요!",
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.white)),
+                  child: const Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -65,9 +105,14 @@ class _UploadPageState extends State<UploadPage> {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {
-                      Posting.newPosting(postInfo);
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      bool status = await Posting.newPosting(postInfo);
+                      if (status) {
+                        Navigator.pop(context);
+                      } else {
+                        // write your code here...
+                        FlutterDialog();
+                      }
                     },
                     child: const Text(
                       '확인',

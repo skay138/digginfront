@@ -20,7 +20,7 @@ class PostDetail extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    String youtubeLinkId = post.youtube_link.split('v=')[1];
+    String youtubeLinkId = post.youtube_link;
     DateTime nowTime = DateTime.now();
     DateTime postTime = DateTime.parse(post.date);
     Duration duration = nowTime.difference(postTime);
@@ -53,10 +53,6 @@ class PostDetail extends StatelessWidget {
                       child: Image.network(
                         post.youtube_data['thumb'],
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.network(
-                              'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061131_960_720.png');
-                        },
                       ),
                     ),
                   ),

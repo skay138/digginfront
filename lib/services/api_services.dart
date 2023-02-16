@@ -133,7 +133,7 @@ class Posting {
       return postinstances;
     } catch (e) {
       print(e);
-      throw Error();
+      return postinstances;
     }
   }
 
@@ -150,7 +150,7 @@ class Posting {
       }
       return postinstances;
     } else {
-      throw Error();
+      return postinstances;
     }
   }
 
@@ -188,15 +188,16 @@ class Posting {
     }
   }
 
-  static Future<String> newPosting(Map<String, dynamic> postInfo) async {
+  static Future<bool> newPosting(Map<String, dynamic> postInfo) async {
     final url = Uri.parse(baseUrl);
     final response = await http.post(
       url,
       body: postInfo,
     );
     if (response.statusCode == 200) {
-      print(response.body);
-      return response.body;
+      return true;
+    } else if (response.statusCode == 400) {
+      return false;
     }
     throw Error();
   }
