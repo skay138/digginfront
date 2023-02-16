@@ -108,7 +108,9 @@ class _UploadPageState extends State<UploadPage> {
                     onPressed: () async {
                       bool status = await Posting.newPosting(postInfo);
                       if (status) {
-                        Navigator.pop(context);
+                        if (mounted) {
+                          Navigator.pop(context);
+                        }
                       } else {
                         // write your code here...
                         FlutterDialog();
