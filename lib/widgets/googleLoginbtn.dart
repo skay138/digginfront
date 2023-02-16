@@ -35,7 +35,7 @@ class GoogleLogin extends StatelessWidget {
           '구글 로그인',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        onPressed: () {
+        onPressed: () async {
           final provider =
               Provider.of<GoogleSignInProvider>(context, listen: false);
           provider.googleLogin();

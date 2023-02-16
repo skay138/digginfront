@@ -27,7 +27,6 @@ class LoginStatusPage extends StatelessWidget {
               future: django,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  //print(snapshot.data!.is_signed);
                   if (snapshot.data!.is_signed == true) {
                     return MainPage(user: snapshot.data);
                   } else {
