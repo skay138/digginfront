@@ -128,6 +128,7 @@ class PostDetail extends StatelessWidget {
                         },
                       ),
                       (duration.inHours < 24)
+                          // 1시간 이하일땐 분단위 띄워주게 할게요
                           ? Text('${duration.inHours} 시간 전')
                           : Text('${duration.inDays} 일 전'),
                     ],
