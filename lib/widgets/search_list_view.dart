@@ -70,7 +70,7 @@ class SearchListView extends StatelessWidget {
                                 color: Colors.white.withOpacity(0.5))
                           ]),
                           child: Image.network(
-                            post.youtube_data['thumb'],
+                            post.youtube_thumb,
                             fit: BoxFit.cover,
                           ),
                         ),

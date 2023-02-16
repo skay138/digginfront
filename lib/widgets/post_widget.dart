@@ -63,7 +63,7 @@ class DigginPost extends StatelessWidget {
                               color: Colors.white.withOpacity(0.5))
                         ]),
                     child: Image.network(
-                      post.youtube_data['thumb'],
+                      post.youtube_thumb,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -103,7 +103,7 @@ class DigginPost extends StatelessWidget {
                             height: 45,
                             child: Center(
                               child: Text(
-                                post.youtube_data['title'],
+                                post.youtube_title,
                                 style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -155,7 +155,7 @@ class DigginPost extends StatelessWidget {
                             color: Colors.white.withOpacity(0.5))
                       ]),
                   child: Image.network(
-                    post.youtube_data['thumb'],
+                    post.youtube_thumb,
                     fit: BoxFit.cover,
                   ),
                 ),

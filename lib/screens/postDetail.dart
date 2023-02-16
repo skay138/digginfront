@@ -51,7 +51,7 @@ class PostDetail extends StatelessWidget {
                                 color: Colors.white.withOpacity(0.5))
                           ]),
                       child: Image.network(
-                        post.youtube_data['thumb'],
+                        post.youtube_thumb,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -61,9 +61,9 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Player(youtubeLinkId, post.youtube_data['title']),
+              Player(youtubeLinkId, post.youtube_title),
               Text(
-                post.youtube_data['title'],
+                post.youtube_title,
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -144,11 +144,11 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              ExpansionTile(
-                title: const Text('음악 자세히'),
+              const ExpansionTile(
+                title: Text('음악 자세히'),
                 children: [
                   Text(
-                    post.youtube_data['desc'],
+                    '여기에 링크?? 모름',
                   ),
                 ],
               ),
