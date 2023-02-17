@@ -19,13 +19,13 @@ class PostDetail extends StatelessWidget {
     super.key,
     required this.post,
   });
+
   @override
   Widget build(BuildContext context) {
     String youtubeLinkId = post.youtube_link;
     DateTime nowTime = DateTime.now();
     DateTime postTime = DateTime.parse(post.date);
     Duration duration = nowTime.difference(postTime);
-
     // 복사완료 표시 함수
     void _showDialog() {
       showDialog(
@@ -88,9 +88,10 @@ class PostDetail extends StatelessWidget {
               ),
               // Player(youtubeLinkId, post.youtube_title),
               Text(
+                // 유튜브 제목
                 post.youtube_title,
                 style: const TextStyle(
-                  fontSize: 28,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -127,13 +128,16 @@ class PostDetail extends StatelessWidget {
                           );
                         },
                       ),
-                      (duration.inDays < 1)
-                          ? (duration.inHours < 1)
-                              ? (duration.inMinutes < 1)
-                                  ? const Text('방금 전')
-                                  : Text('${duration.inMinutes} 분 전')
-                              : Text('${duration.inHours} 시간 전')
-                          : Text('${duration.inDays} 일 전'),
+                      Container(
+                        // 작성시간
+                        child: (duration.inDays < 1)
+                            ? (duration.inHours < 1)
+                                ? (duration.inMinutes < 1)
+                                    ? const Text('방금 전')
+                                    : Text('${duration.inMinutes} 분 전')
+                                : Text('${duration.inHours} 시간 전')
+                            : Text('${duration.inDays} 일 전'),
+                      ),
                     ],
                   ),
                   Row(
@@ -151,9 +155,7 @@ class PostDetail extends StatelessWidget {
                             currentUser: currentUser,
                             post: post,
                             islike: post.userlike,
-                          ),
-                          Text(
-                            post.like_count.toString(),
+                            postlikeCount: post.like_count,
                           ),
                         ],
                       ),
@@ -170,7 +172,7 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              TextButton(
+              IconButton(
                 onPressed: () {
                   String youtubeLink = post.youtube_link;
                   Clipboard.setData(
@@ -178,7 +180,7 @@ class PostDetail extends StatelessWidget {
                   );
                   _showDialog();
                 },
-                child: const Text('유튜브 링크 복사'),
+                icon: const Icon(Icons.link),
               ),
               Commentwidget(comments: comments)
             ],
@@ -190,14 +192,17 @@ class PostDetail extends StatelessWidget {
 }
 
 class postlikebtn extends StatefulWidget {
-  postlikebtn(
-      {super.key,
-      required this.currentUser,
-      required this.post,
-      required this.islike});
+  postlikebtn({
+    super.key,
+    required this.currentUser,
+    required this.post,
+    required this.islike,
+    required this.postlikeCount,
+  });
 
   final String currentUser;
   final postModel post;
+  final int postlikeCount;
   bool islike;
 
   @override
@@ -209,9 +214,11 @@ class _postlikebtnState extends State<postlikebtn> {
   void initState() {
     super.initState();
     islike = widget.islike;
+    likeCount = widget.postlikeCount;
     print(islike);
   }
 
+  late int likeCount;
   late bool islike;
 
   @override
@@ -224,16 +231,23 @@ class _postlikebtnState extends State<postlikebtn> {
       print(res);
     }
 
-    return IconButton(
-      onPressed: () {
-        postlikehanddle();
-        setState(() {
-          islike = !islike;
-        });
-
-        // post.userlike 처리
-      },
-      icon: Icon(islike ? Icons.favorite : Icons.favorite_border),
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {
+            postlikehanddle();
+            setState(() {
+              islike ? likeCount-- : likeCount++;
+              islike = !islike;
+            });
+            // post.userlike 처리
+          },
+          icon: Icon(islike ? Icons.favorite : Icons.favorite_border),
+        ),
+        Text(
+          likeCount.toString(),
+        ),
+      ],
     );
   }
 }
