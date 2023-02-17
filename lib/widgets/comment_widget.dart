@@ -11,6 +11,7 @@ class Commentwidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ExpansionTile(
+          backgroundColor: Colors.white,
           title: const Text(
             "댓글",
             style: TextStyle(fontSize: 18),
@@ -21,7 +22,10 @@ class Commentwidget extends StatelessWidget {
               future: comments,
               builder: (context, res) {
                 if (res.data?.isEmpty == true) {
-                  return const Text('아직 댓글이 없어요!');
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Text('아직 댓글이 없어요!'),
+                  );
                 } else if (res.hasData) {
                   return Column(
                     children: [
@@ -50,15 +54,15 @@ class DigginComment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 5,
-                offset: const Offset(5, 5),
-                color: Colors.black.withOpacity(0.4)),
-          ]),
+      // decoration: BoxDecoration(
+      //     color: Theme.of(context).cardColor,
+      //     borderRadius: BorderRadius.circular(20),
+      //     boxShadow: [
+      //       BoxShadow(
+      //           blurRadius: 5,
+      //           offset: const Offset(5, 5),
+      //           color: Colors.black.withOpacity(0.4)),
+      //     ]),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 10,

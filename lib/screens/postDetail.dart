@@ -56,7 +56,69 @@ class PostDetail extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: FutureBuilder(
+                  future: user,
+                  builder: (context, snapshot) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: InkWell(
+                        onTap: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => ProfilePage(
+                                user: snapshot.data!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              (snapshot.data != null)
+                                  ? SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 1),
+                                          color: Colors.black,
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: (snapshot.data?.image !=
+                                                      null)
+                                                  ? NetworkImage(
+                                                      'http://diggin.kro.kr:4000/${snapshot.data!.image}')
+                                                  : const NetworkImage(
+                                                      'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
+                                        ),
+                                      ))
+                                  : const SizedBox(
+                                      width: 50,
+                                    ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                post.nickname,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -83,17 +145,42 @@ class PostDetail extends StatelessWidget {
                   ),
                 ],
               ),
+              // Player(youtubeLinkId, post.youtube_title),
+
               const SizedBox(
                 height: 20,
               ),
-              // Player(youtubeLinkId, post.youtube_title),
-              Text(
-                // 유튜브 제목
-                post.youtube_title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      // 유튜브 제목
+                      post.youtube_title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      String youtubeLink = post.youtube_link;
+                      Clipboard.setData(
+                        ClipboardData(text: 'https://youtu.be/$youtubeLink'),
+                      );
+                      _showDialog();
+                    },
+                    icon: const Icon(Icons.link),
+                  ),
+                  postlikebtn(
+                    currentUser: currentUser,
+                    post: post,
+                    islike: post.userlike,
+                    postlikeCount: post.like_count,
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 20,
@@ -101,88 +188,46 @@ class PostDetail extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FutureBuilder(
-                        future: user,
-                        builder: (context, snapshot) {
-                          return TextButton(
-                            onPressed: () async {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      ProfilePage(
-                                    user: snapshot.data!,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              post.nickname,
-                              style: const TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      Container(
-                        // 작성시간
-                        child: (duration.inDays < 1)
-                            ? (duration.inHours < 1)
-                                ? (duration.inMinutes < 1)
-                                    ? const Text('방금 전')
-                                    : Text('${duration.inMinutes} 분 전')
-                                : Text('${duration.inHours} 시간 전')
-                            : Text('${duration.inDays} 일 전'),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        post.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          postlikebtn(
-                            currentUser: currentUser,
-                            post: post,
-                            islike: post.userlike,
-                            postlikeCount: post.like_count,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Text(
-                    post.content.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
+                  SizedBox(
+                    width: 300,
+                    child: Text(
+                      post.title,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SizedBox(
+                    width: 280,
+                    child: Text(
+                      post.content.toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    // 작성시간
+                    child: (duration.inDays < 1)
+                        ? (duration.inHours < 1)
+                            ? (duration.inMinutes < 1)
+                                ? const Text('방금 전')
+                                : Text('${duration.inMinutes} 분 전')
+                            : Text('${duration.inHours} 시간 전')
+                        : Text('${duration.inDays} 일 전'),
                   ),
                 ],
               ),
               const SizedBox(
                 height: 30,
               ),
-              IconButton(
-                onPressed: () {
-                  String youtubeLink = post.youtube_link;
-                  Clipboard.setData(
-                    ClipboardData(text: 'https://youtu.be/$youtubeLink'),
-                  );
-                  _showDialog();
-                },
-                icon: const Icon(Icons.link),
-              ),
-              Commentwidget(comments: comments)
+              Commentwidget(comments: comments),
             ],
           ),
         ),
@@ -242,10 +287,14 @@ class _postlikebtnState extends State<postlikebtn> {
             });
             // post.userlike 처리
           },
-          icon: Icon(islike ? Icons.favorite : Icons.favorite_border),
+          icon: Icon(
+            islike ? Icons.favorite : Icons.favorite_border,
+            size: 26,
+          ),
         ),
         Text(
           likeCount.toString(),
+          style: const TextStyle(fontSize: 22),
         ),
       ],
     );
