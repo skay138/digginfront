@@ -4,6 +4,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
+import 'package:digginfront/widgets/userImgCircle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -80,35 +81,17 @@ class PostDetail extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Row(
                             children: [
-                              (snapshot.data != null)
-                                  ? SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(width: 1),
-                                          color: Colors.black,
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: (snapshot.data?.image !=
-                                                      null)
-                                                  ? NetworkImage(
-                                                      'http://diggin.kro.kr:4000/${snapshot.data!.image}')
-                                                  : const NetworkImage(
-                                                      'http://diggin.kro.kr:4000/media/profile_image/default_profile.png')),
-                                        ),
-                                      ))
-                                  : const SizedBox(
-                                      width: 50,
-                                    ),
+                              UserImgCircle(
+                                size: 45,
+                                uid: currentUser,
+                              ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(
                                 post.nickname,
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 24,
                                 ),
                               ),
                             ],

@@ -1,5 +1,6 @@
 import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/widgets/comment_upload.dart';
+import 'package:digginfront/widgets/userImgCircle.dart';
 import 'package:flutter/material.dart';
 
 class Commentwidget extends StatelessWidget {
@@ -12,6 +13,7 @@ class Commentwidget extends StatelessWidget {
   final String postId;
   @override
   Widget build(BuildContext context) {
+    void addComment() {}
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -72,29 +74,41 @@ class DigginComment extends StatelessWidget {
           ]),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 30,
+          horizontal: 5,
           vertical: 10,
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 5),
-                child: Text(
-                  comment.nickname,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Text(
-                comment.content.toString(),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400),
+              Row(
+                children: [
+                  UserImgCircle(size: 25, uid: comment.uid),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          comment.nickname,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Text(
+                        comment.content.toString(),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
