@@ -1,10 +1,15 @@
 import 'package:digginfront/models/commentModel.dart';
+import 'package:digginfront/widgets/comment_upload.dart';
 import 'package:flutter/material.dart';
 
 class Commentwidget extends StatelessWidget {
   final Future<List<commentModel>> comments;
-  const Commentwidget({super.key, required this.comments});
-
+  const Commentwidget({
+    super.key,
+    required this.comments,
+    required this.postUid,
+  });
+  final String postUid;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,6 +23,7 @@ class Commentwidget extends StatelessWidget {
           ),
           initiallyExpanded: true,
           children: [
+            CommentUpload(postUid: postUid),
             FutureBuilder(
               future: comments,
               builder: (context, res) {

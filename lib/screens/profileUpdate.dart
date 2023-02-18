@@ -288,7 +288,7 @@ class _SignUpState extends State<SignUp> {
                           minWidth: double.infinity,
                           height: 60,
 
-                          /** 유저 정보 업데이트 실행*/
+                          /// 유저 정보 업데이트 실행
                           onPressed: () {
                             Account.profileUpdate(
                                 userInfo, profileImage, backgroundImage);
