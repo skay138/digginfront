@@ -1,7 +1,10 @@
 import 'package:digginfront/models/commentModel.dart';
+import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/widgets/comment_upload.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
 import 'package:flutter/material.dart';
+
+import '../services/api_services.dart';
 
 class Commentwidget extends StatelessWidget {
   final Future<List<commentModel>> comments;
@@ -75,7 +78,7 @@ class DigginComment extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 5,
-          vertical: 10,
+          vertical: 5,
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -83,7 +86,26 @@ class DigginComment extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  UserImgCircle(size: 25, uid: comment.uid),
+                  FutureBuilder(
+                    future: Account.getProfile(comment.uid),
+                    builder: ((context, snapshot) {
+                      return InkWell(
+                        onTap: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      ProfilePage(
+                                        user: snapshot.data!,
+                                      )));
+                        },
+                        child: UserImgCircle(
+                          size: 25,
+                          uid: comment.uid,
+                        ),
+                      );
+                    }),
+                  ),
                   const SizedBox(
                     width: 15,
                   ),
