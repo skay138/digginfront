@@ -227,7 +227,10 @@ class PostDetail extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Commentwidget(comments: comments),
+              Commentwidget(
+                comments: comments,
+                postUid: post.uid,
+              ),
             ],
           ),
         ),
