@@ -4,6 +4,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
+import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -102,31 +103,17 @@ class PostDetail extends StatelessWidget {
                   },
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Hero(
-                    tag: post.id,
-                    child: Container(
-                      height: 300,
-                      width: 300,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(0),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 10,
-                                offset: const Offset(0, 0),
-                                color: Colors.white.withOpacity(0.5))
-                          ]),
-                      child: Image.network(
-                        post.youtube_thumb,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+              SizedBox(
+                width: 400,
+                height: 400,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: ThumbnailCrop(
+                    thumbnailUrl: post.youtube_thumb,
+                    width: 300,
+                    height: 300,
                   ),
-                ],
+                ),
               ),
               // Player(youtubeLinkId, post.youtube_title),
 
