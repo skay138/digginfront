@@ -100,7 +100,7 @@ class DigginComment extends StatelessWidget {
                                       )));
                         },
                         child: UserImgCircle(
-                          size: 25,
+                          size: 35,
                           uid: comment.uid,
                         ),
                       );
