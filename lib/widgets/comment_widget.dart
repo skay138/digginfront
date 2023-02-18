@@ -7,9 +7,9 @@ class Commentwidget extends StatelessWidget {
   const Commentwidget({
     super.key,
     required this.comments,
-    required this.postUid,
+    required this.postId,
   });
-  final String postUid;
+  final String postId;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +23,7 @@ class Commentwidget extends StatelessWidget {
           ),
           initiallyExpanded: true,
           children: [
-            CommentUpload(postUid: postUid),
+            CommentUpload(postId: postId),
             FutureBuilder(
               future: comments,
               builder: (context, res) {
@@ -59,20 +59,21 @@ class DigginComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      // decoration: BoxDecoration(
-      //     color: Theme.of(context).cardColor,
-      //     borderRadius: BorderRadius.circular(20),
-      //     boxShadow: [
-      //       BoxShadow(
-      //           blurRadius: 5,
-      //           offset: const Offset(5, 5),
-      //           color: Colors.black.withOpacity(0.4)),
-      //     ]),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 5,
+                offset: const Offset(5, 5),
+                color:
+                    const Color.fromARGB(255, 190, 216, 247).withOpacity(0.2)),
+          ]),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 10,
           horizontal: 30,
+          vertical: 10,
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -80,7 +81,14 @@ class DigginComment extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(comment.nickname),
+              Container(
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Text(
+                  comment.nickname,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
               Text(
                 comment.content.toString(),
                 style: TextStyle(
