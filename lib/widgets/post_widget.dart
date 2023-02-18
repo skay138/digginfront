@@ -1,6 +1,5 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/screens/postDetail.dart';
-import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 
@@ -48,49 +47,27 @@ class DigginPost extends StatelessWidget {
             }),
             child: Column(
               children: [
-                Container(
-                  width: size,
-                  height: size,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            offset: const Offset(0, 0),
-                            color: Colors.white.withOpacity(0.5))
-                      ]),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: ThumbnailCrop(
-                      thumbnailUrl: post.youtube_thumb,
-                      width: 300,
-                      height: 300,
+                Hero(
+                  tag: post.id,
+                  child: Container(
+                    height: size,
+                    width: size,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 10,
+                              offset: const Offset(0, 0),
+                              color: Colors.white.withOpacity(0.5))
+                        ]),
+                    child: Image.network(
+                      post.youtube_thumb,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                // Hero(
-                //   tag: post.id,
-                //   child: Container(
-                //     height: size,
-                //     width: size,
-                //     clipBehavior: Clip.hardEdge,
-                //     decoration: BoxDecoration(
-                //         color: Colors.black,
-                //         borderRadius: BorderRadius.circular(borderRadius),
-                //         boxShadow: [
-                //           BoxShadow(
-                //               blurRadius: 10,
-                //               offset: const Offset(0, 0),
-                //               color: Colors.white.withOpacity(0.5))
-                //         ]),
-                //     child: Image.network(
-                //       post.youtube_thumb,
-                //       fit: BoxFit.cover,
-                //     ),
-                //   ),
-                // ),
                 isFeed
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
