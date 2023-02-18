@@ -256,6 +256,27 @@ class Comment {
       throw Error();
     }
   }
+
+  static Future<bool> newComment(
+      Map<String, dynamic> commentInfo, postId) async {
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse('$baseUrl$postId');
+
+    final response = await http.post(
+      url,
+      headers: auth,
+      body: commentInfo,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else if (response.statusCode == 400) {
+      return false;
+    }
+
+    return false;
+  }
 }
 
 class Taglike {

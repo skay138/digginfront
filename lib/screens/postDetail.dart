@@ -229,7 +229,7 @@ class PostDetail extends StatelessWidget {
               ),
               Commentwidget(
                 comments: comments,
-                postUid: post.uid,
+                postId: post.id.toString(),
               ),
             ],
           ),

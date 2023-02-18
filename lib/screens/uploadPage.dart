@@ -112,7 +112,6 @@ class _UploadPageState extends State<UploadPage> {
                           Navigator.pop(context);
                         }
                       } else {
-                        // write your code here...
                         FlutterDialog();
                       }
                     },
