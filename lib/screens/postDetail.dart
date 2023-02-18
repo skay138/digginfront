@@ -103,9 +103,11 @@ class PostDetail extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
-                width: 400,
-                height: 400,
+              Container(
+                width: 420,
+                height: 420,
+                clipBehavior: Clip.hardEdge,
+                decoration: const BoxDecoration(shape: BoxShape.rectangle),
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: ThumbnailCrop(
@@ -117,9 +119,6 @@ class PostDetail extends StatelessWidget {
               ),
               // Player(youtubeLinkId, post.youtube_title),
 
-              const SizedBox(
-                height: 20,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

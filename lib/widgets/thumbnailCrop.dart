@@ -16,7 +16,7 @@ class ThumbnailCrop extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRect(
       clipBehavior: Clip.hardEdge,
-      clipper: _ThumbnailClipper(),
+      clipper: _ThumbnailClipper(width: width, height: height),
       child: Image.network(
         thumbnailUrl,
         width: width,
@@ -28,13 +28,20 @@ class ThumbnailCrop extends StatelessWidget {
 }
 
 class _ThumbnailClipper extends CustomClipper<Rect> {
+  final double width;
+  final double height;
+
+  _ThumbnailClipper({
+    required this.width,
+    required this.height,
+  });
+
   @override
   Rect getClip(Size size) {
-    // 640 x 480
     return Rect.fromCenter(
-      center: const Offset(151, 151),
-      width: 220,
-      height: 220,
+      center: Offset(width / 2, height / 2),
+      width: width - width * 0.3,
+      height: height - height * 0.3,
     );
   }
 

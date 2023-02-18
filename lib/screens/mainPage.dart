@@ -39,7 +39,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    getUpdate();
+    //getUpdate();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: {
