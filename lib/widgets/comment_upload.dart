@@ -55,16 +55,7 @@ class _CommentUploadState extends State<CommentUpload> {
           });
 
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            content: SizedBox(
-              child: Center(
-                  child: SizedBox(
-                width: 200,
-                height: 80,
-                child: Text(status ? '댓글이 등록되었습니다.' : '등록에 실패했습니다.'),
-              )),
-            ),
+            content: Text(status ? '댓글이 등록되었습니다.' : '등록에 실패했습니다.'),
           );
         },
       );

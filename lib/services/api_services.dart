@@ -316,6 +316,26 @@ class Comment {
 
     return false;
   }
+
+  static Future<bool> delComment(String uid, String commentId) async {
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse('$baseUrl$commentId');
+
+    final response = await http.delete(
+      url,
+      headers: auth,
+      body: {'uid': uid},
+    );
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      return true;
+    } else if (response.statusCode == 400) {
+      return false;
+    }
+
+    return false;
+  }
 }
 
 class Taglike {
