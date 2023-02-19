@@ -1,5 +1,7 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/screens/postDetail.dart';
+import 'package:digginfront/widgets/postLikeBtn.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 
@@ -9,6 +11,7 @@ class DigginPost extends StatelessWidget {
   final double borderRadius;
   final bool needText;
   bool isFeed;
+  String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   DigginPost(
       {super.key,
@@ -85,13 +88,8 @@ class DigginPost extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('작성자 : ${post.nickname}'),
-                                Text(
-                                  post.like_count.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
+                                postlikebtn(
+                                    currentUser: currentUser, post: post)
                               ],
                             ),
                           )

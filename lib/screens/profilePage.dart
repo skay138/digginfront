@@ -50,12 +50,12 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _TopPortion extends StatelessWidget {
-  _TopPortion({Key? key, required this.user}) : super(key: key);
   userModel user;
+  _TopPortion({Key? key, required this.user}) : super(key: key);
+  final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
-    final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
-    final isFollowing = Account.isFollowing(currentUserUid, user.uid);
     return Stack(
       children: [
         ClipPath(
@@ -142,27 +142,9 @@ class _TopPortion extends StatelessWidget {
                             Icons.edit,
                             size: 30,
                           ))
-                      : FutureBuilder(
-                          future: isFollowing,
-                          builder: (context, snapshot) {
-                            return FollowBtn(
-                              follower: currentUserUid,
-                              followee: user.uid,
-                              isFollowing: (snapshot.data == 'true'),
-                            );
-                            // if (snapshot.data == 'true') {
-                            //   return IconButton(
-                            //     onPressed: () {},
-                            //     icon: const Icon(
-                            //         Icons.remove_circle_outline_sharp),
-                            //   );
-                            // } else {
-                            //   return IconButton(
-                            //     onPressed: () {},
-                            //     icon: const Icon(Icons.add_circle),
-                            //   );
-                            // }
-                          },
+                      : FollowBtn(
+                          follower: currentUserUid,
+                          followee: user.uid,
                         ),
                 ],
               ),
@@ -335,12 +317,10 @@ class FollowBtn extends StatefulWidget {
     super.key,
     required this.followee,
     required this.follower,
-    required this.isFollowing,
   });
 
   final String follower;
   final String followee;
-  final bool isFollowing;
 
   @override
   State<FollowBtn> createState() => _FollowBtnState();
@@ -350,43 +330,49 @@ class _FollowBtnState extends State<FollowBtn> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      isFollowing = widget.isFollowing;
-      followInfo['follower'] = widget.follower;
-      followInfo['followee'] = widget.followee;
-    });
+    getIsfollowing = Account.isFollowing(widget.follower, widget.followee);
   }
 
-  Map<String, String> followInfo = {
-    'follower': '',
-    'followee': '',
+  late Future<bool> getIsfollowing;
+
+  late Map<String, String> followInfo = {
+    "follower": widget.follower,
+    "followee": widget.followee,
   };
-  bool isFollowing = false;
 
   @override
   Widget build(BuildContext context) {
-    void followHanddle() async {
-      bool res = isFollowing
+    void followHanddle(bool status) async {
+      status
           ? await Account.deleteFollow(followInfo)
           : await Account.postFollow(followInfo);
 
-      print(res);
+      setState(() {
+        getIsfollowing = Account.isFollowing(widget.follower, widget.followee);
+      });
     }
 
-    return IconButton(
-      onPressed: () {
-        followHanddle();
-        setState(() {
-          isFollowing = !isFollowing;
-        });
-        // post.userlike 처리
+    return FutureBuilder(
+      future: getIsfollowing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return IconButton(
+            onPressed: () {
+              followHanddle(snapshot.data!);
+
+              // post.userlike 처리
+            },
+            icon: Icon(
+              (snapshot.data!)
+                  ? Icons.remove_circle_outline_rounded
+                  : Icons.add_circle_outline_rounded,
+              size: 26,
+            ),
+          );
+        } else {
+          return const Text('');
+        }
       },
-      icon: Icon(
-        isFollowing
-            ? Icons.remove_circle_outline_rounded
-            : Icons.add_circle_outline_rounded,
-        size: 26,
-      ),
     );
   }
 }

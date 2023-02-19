@@ -4,6 +4,7 @@ import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
+import 'package:digginfront/widgets/postLikeBtn.dart';
 import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,12 +143,7 @@ class PostDetail extends StatelessWidget {
                     },
                     icon: const Icon(Icons.link),
                   ),
-                  postlikebtn(
-                    currentUser: currentUser,
-                    post: post,
-                    islike: post.userlike,
-                    postlikeCount: post.like_count,
-                  ),
+                  postlikebtn(currentUser: currentUser, post: post),
                 ],
               ),
               const SizedBox(
@@ -203,71 +199,6 @@ class PostDetail extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class postlikebtn extends StatefulWidget {
-  postlikebtn({
-    super.key,
-    required this.currentUser,
-    required this.post,
-    required this.islike,
-    required this.postlikeCount,
-  });
-
-  final String currentUser;
-  final postModel post;
-  final int postlikeCount;
-  bool islike;
-
-  @override
-  State<postlikebtn> createState() => _postlikebtnState();
-}
-
-class _postlikebtnState extends State<postlikebtn> {
-  @override
-  void initState() {
-    super.initState();
-    islike = widget.islike;
-    likeCount = widget.postlikeCount;
-    print(islike);
-  }
-
-  late int likeCount;
-  late bool islike;
-
-  @override
-  Widget build(BuildContext context) {
-    void postlikehanddle() async {
-      String res = islike
-          ? await Taglike.postunlike(widget.currentUser, widget.post.id)
-          : await Taglike.postlike(widget.currentUser, widget.post.id);
-
-      print(res);
-    }
-
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {
-            postlikehanddle();
-            setState(() {
-              islike ? likeCount-- : likeCount++;
-              islike = !islike;
-            });
-            // post.userlike 처리
-          },
-          icon: Icon(
-            islike ? Icons.favorite : Icons.favorite_border,
-            size: 26,
-          ),
-        ),
-        Text(
-          likeCount.toString(),
-          style: const TextStyle(fontSize: 22),
-        ),
-      ],
     );
   }
 }

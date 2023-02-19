@@ -82,16 +82,18 @@ class Account {
     }
   }
 
-  static Future<String> isFollowing(String follower, String followee) async {
+  static Future<bool> isFollowing(String follower, String followee) async {
     String follow = "follow?follower=$follower&followee=$followee";
     final url = Uri.parse('$baseUrl$follow');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['status'] == 'true') {
-        return 'true';
+        return true;
+      } else if (data['status'] == 'false') {
+        return false;
       } else {
-        return 'false';
+        throw Error();
       }
     } else {
       throw Error();
@@ -115,11 +117,12 @@ class Account {
     }
   }
 
-  static Future<bool> postFollow(Map<String, String> followInfo) async {
+  static Future<bool> postFollow(Map<String, dynamic> followInfo) async {
+    String follow = "follow";
     Map<String, String> auth = {
       'authorization': FirebaseAuth.instance.currentUser!.uid
     };
-    final url = Uri.parse(baseUrl);
+    final url = Uri.parse('$baseUrl$follow');
     final response = await http.post(
       url,
       headers: auth,
@@ -133,11 +136,12 @@ class Account {
     }
   }
 
-  static Future<bool> deleteFollow(Map<String, String> followInfo) async {
+  static Future<bool> deleteFollow(Map<String, dynamic> followInfo) async {
+    String follow = "follow";
     Map<String, String> auth = {
       'authorization': FirebaseAuth.instance.currentUser!.uid
     };
-    final url = Uri.parse(baseUrl);
+    final url = Uri.parse('$baseUrl$follow');
     final response = await http.delete(
       url,
       headers: auth,
@@ -316,6 +320,24 @@ class Comment {
 
 class Taglike {
   static const String baseUrl = 'http://diggin.kro.kr:4000/taglike';
+
+  static Future<postLikeModel> getPostLike(int postId) async {
+    String postlike = "/postlike?post_id=$postId";
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse('$baseUrl$postlike');
+    final response = await http.get(url, headers: auth);
+    if (response.statusCode == 200) {
+      final res = jsonDecode(response.body);
+      return postLikeModel.fromJson(res);
+    } else if (response.statusCode == 201) {
+      final res = jsonDecode(response.body);
+      return postLikeModel.fromJson(res);
+    } else {
+      throw Error();
+    }
+  }
 
   static Future<String> postlike(String uid, int postId) async {
     Map<String, dynamic> data = {'uid': uid, 'post_id': postId.toString()};
