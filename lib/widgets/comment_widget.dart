@@ -65,7 +65,7 @@ class DigginComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onLongPress: () {
         if (comment.uid == FirebaseAuth.instance.currentUser!.uid) {
           showDeleteAlert(context);
         }
@@ -137,7 +137,6 @@ class DigginComment extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(comment.id.toString()),
                   ],
                 ),
               ],
