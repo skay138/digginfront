@@ -114,6 +114,41 @@ class Account {
       throw Error();
     }
   }
+
+  static Future<bool> postFollow(Map<String, String> followInfo) async {
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse(baseUrl);
+    final response = await http.post(
+      url,
+      headers: auth,
+      body: followInfo,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+      //throw Error();
+    }
+  }
+
+  static Future<bool> deleteFollow(Map<String, String> followInfo) async {
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse(baseUrl);
+    final response = await http.delete(
+      url,
+      headers: auth,
+      body: followInfo,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Error();
+    }
+  }
 }
 
 class Posting {

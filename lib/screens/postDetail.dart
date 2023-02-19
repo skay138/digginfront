@@ -65,38 +65,37 @@ class PostDetail extends StatelessWidget {
                 child: FutureBuilder(
                   future: user,
                   builder: (context, snapshot) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: InkWell(
-                        onTap: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => ProfilePage(
-                                user: snapshot.data!,
+                    return InkWell(
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => ProfilePage(
+                              user: snapshot.data!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            UserImgCircle(
+                              size: 45,
+                              uid: (snapshot.data != null)
+                                  ? snapshot.data!.uid
+                                  : currentUser,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              post.nickname,
+                              style: const TextStyle(
+                                fontSize: 24,
                               ),
                             ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            children: [
-                              UserImgCircle(
-                                size: 45,
-                                uid: currentUser,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                post.nickname,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
                     );
@@ -104,8 +103,8 @@ class PostDetail extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 420,
-                height: 420,
+                width: 400,
+                height: 400,
                 clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(shape: BoxShape.rectangle),
                 child: FittedBox(

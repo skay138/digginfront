@@ -145,12 +145,23 @@ class _TopPortion extends StatelessWidget {
                       : FutureBuilder(
                           future: isFollowing,
                           builder: (context, snapshot) {
-                            if (snapshot.data == 'true') {
-                              return const Icon(
-                                  Icons.remove_circle_outline_sharp);
-                            } else {
-                              return const Icon(Icons.add_circle);
-                            }
+                            return FollowBtn(
+                              follower: currentUserUid,
+                              followee: user.uid,
+                              isFollowing: (snapshot.data == 'true'),
+                            );
+                            // if (snapshot.data == 'true') {
+                            //   return IconButton(
+                            //     onPressed: () {},
+                            //     icon: const Icon(
+                            //         Icons.remove_circle_outline_sharp),
+                            //   );
+                            // } else {
+                            //   return IconButton(
+                            //     onPressed: () {},
+                            //     icon: const Icon(Icons.add_circle),
+                            //   );
+                            // }
                           },
                         ),
                 ],
@@ -314,6 +325,67 @@ class _ProfileInfoRow extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class FollowBtn extends StatefulWidget {
+  const FollowBtn({
+    super.key,
+    required this.followee,
+    required this.follower,
+    required this.isFollowing,
+  });
+
+  final String follower;
+  final String followee;
+  final bool isFollowing;
+
+  @override
+  State<FollowBtn> createState() => _FollowBtnState();
+}
+
+class _FollowBtnState extends State<FollowBtn> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isFollowing = widget.isFollowing;
+      followInfo['follower'] = widget.follower;
+      followInfo['followee'] = widget.followee;
+    });
+  }
+
+  Map<String, String> followInfo = {
+    'follower': '',
+    'followee': '',
+  };
+  bool isFollowing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    void followHanddle() async {
+      bool res = isFollowing
+          ? await Account.deleteFollow(followInfo)
+          : await Account.postFollow(followInfo);
+
+      print(res);
+    }
+
+    return IconButton(
+      onPressed: () {
+        followHanddle();
+        setState(() {
+          isFollowing = !isFollowing;
+        });
+        // post.userlike 처리
+      },
+      icon: Icon(
+        isFollowing
+            ? Icons.remove_circle_outline_rounded
+            : Icons.add_circle_outline_rounded,
+        size: 26,
       ),
     );
   }
