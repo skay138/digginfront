@@ -40,8 +40,8 @@ class _ThumbnailClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) {
     return Rect.fromCenter(
       center: Offset(width / 2, height / 2),
-      width: width - width * 0.3,
-      height: height - height * 0.3,
+      width: width - width * 0.25,
+      height: height - height * 0.25,
     );
   }
 
