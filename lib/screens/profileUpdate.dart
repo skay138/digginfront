@@ -271,7 +271,7 @@ class _SignUpState extends State<SignUp> {
                           GenderPicker(
                             setInfo: setInfo,
                             infoType: 'gender',
-                            defaultGender: userInfo['gender'],
+                            defaultGender: userInfo['gender'] ?? 'M',
                           ),
                           const SizedBox(height: 20),
                         ],
