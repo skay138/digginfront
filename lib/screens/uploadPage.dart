@@ -7,9 +7,11 @@ class UploadPage extends StatefulWidget {
     super.key,
     required this.user,
     required this.getUpdate,
+    required this.updateRecentPost,
   });
   userModel user;
   final Function getUpdate;
+  final Function updateRecentPost;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
@@ -120,6 +122,7 @@ class _UploadPageState extends State<UploadPage> {
                         FlutterDialog();
                       }
                       widget.getUpdate();
+                      widget.updateRecentPost();
                     },
                     child: const Text(
                       '확인',

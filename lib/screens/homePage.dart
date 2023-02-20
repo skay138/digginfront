@@ -9,7 +9,9 @@ import 'package:digginfront/screens/feedPage.dart';
 class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
+    required this.updateRecentPost,
   });
+  final Function updateRecentPost;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +104,7 @@ class HomePage extends StatelessWidget {
               child: RecentPost(
                 number: 3,
                 page: 1,
+                updateRecentPost: updateRecentPost,
               ),
             ),
           ],

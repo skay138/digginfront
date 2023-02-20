@@ -4,15 +4,20 @@ import 'package:digginfront/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 
 class RecentPost extends StatelessWidget {
+  RecentPost(
+      {super.key,
+      required this.number,
+      required this.page,
+      required this.updateRecentPost});
   final int number;
   final int page;
-  RecentPost({super.key, required this.number, required this.page});
+  final Function updateRecentPost;
 
-  late final Future<List<postModel>> posts =
-      Posting.getRecentPosts(number, page);
+  late Future<List<postModel>> posts = Posting.getRecentPosts(number, page);
 
   @override
   Widget build(BuildContext context) {
+    posts = updateRecentPost();
     return SizedBox(
       height: 150,
       child: FutureBuilder(

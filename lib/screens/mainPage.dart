@@ -37,6 +37,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  // recentPost 업데이트
+  Future<List<postModel>> updateRecentPost() async {
+    List<postModel> recentUpdated = await Posting.getRecentPosts(3, 1);
+    return recentUpdated;
+  }
+
   @override
   Widget build(BuildContext context) {
     //getUpdate();
@@ -44,7 +50,9 @@ class _MainPageState extends State<MainPage> {
       resizeToAvoidBottomInset: false,
       body: {
         // Map type으로 각 페이지를 import 해옴
-        'home': const HomePage(),
+        'home': HomePage(
+          updateRecentPost: updateRecentPost,
+        ),
         'feed': FeedPage(
           uid: refreshUser.uid,
         ),
@@ -59,6 +67,7 @@ class _MainPageState extends State<MainPage> {
         tabState: tabState,
         setTabState: setTabState,
         getUpdate: getUpdate,
+        updateRecentPost: updateRecentPost,
       ),
     );
   }
