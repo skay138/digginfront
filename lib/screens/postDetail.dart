@@ -2,6 +2,7 @@ import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
+import 'package:digginfront/screens/uploadPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/postLikeBtn.dart';
@@ -120,16 +121,15 @@ class _PostDetailState extends State<PostDetail> {
                             TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute<void>(
-                                  //     builder: (BuildContext context) =>
-                                  //         UploadPage(
-
-                                  //       post: widget.post,
-                                  //     ),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          UploadPage(
+                                        post: widget.post,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: const Text('수정')),
                             TextButton(

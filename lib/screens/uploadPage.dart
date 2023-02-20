@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 class UploadPage extends StatefulWidget {
   UploadPage(
       {super.key,
-      required this.getUpdate,
-      required this.updateRecentPost,
+      //required this.getUpdate,
+      // required this.updateRecentPost,
       this.post});
   postModel? post;
   final String currentUser = FirebaseAuth.instance.currentUser!.uid;
-  final Function getUpdate;
-  final Function updateRecentPost;
+  //final Function getUpdate;
+  // final Function updateRecentPost;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
@@ -156,8 +156,8 @@ class _UploadPageState extends State<UploadPage> {
                           FlutterDialog();
                         }
                       }
-                      widget.getUpdate();
-                      widget.updateRecentPost();
+                      //widget.getUpdate();
+                      //widget.updateRecentPost();
                     },
                     child: const Text(
                       '확인',
