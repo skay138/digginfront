@@ -262,7 +262,11 @@ class _SignUpState extends State<SignUp> {
                           DatePicker(
                             setInfo: setInfo,
                             infoType: 'birth',
-                            defaultDate: DateTime.parse(user.birth.toString()),
+                            defaultDate: DateTime.parse(
+                              (user.birth != null)
+                                  ? user.birth.toString()
+                                  : DateTime.now().toString(),
+                            ),
                           ),
                           GenderPicker(
                             setInfo: setInfo,
