@@ -150,7 +150,7 @@ class _DigginCommentState extends State<DigginComment> {
           },
           onLongPress: () {
             if (widget.comment.uid == FirebaseAuth.instance.currentUser!.uid) {
-              showDeleteAlert(context);
+              showEditDelAlert(context, widget.comment);
             }
           },
           child: Container(
@@ -247,8 +247,8 @@ class _DigginCommentState extends State<DigginComment> {
     );
   }
 
-  showDeleteAlert(BuildContext context) {
-    void showDeleteStatus(status) {
+  showEditDelAlert(BuildContext context, commentModel comment) {
+    void showEditDelStatus(status) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -257,12 +257,22 @@ class _DigginCommentState extends State<DigginComment> {
           });
 
           return AlertDialog(
-            content: Text(status ? '댓글이 삭제되었습니다.' : '엥 뭐지'),
+            content: Text(status ? '처리되었습니다.' : '엥 뭐지'),
           );
         },
       );
     }
 
+    Widget showPutButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 241, 241, 241),
+      ),
+      child: const Text("수정"),
+      onPressed: () {
+        Navigator.of(context).pop();
+        showEditAlert(context, comment);
+      },
+    );
     Widget cancelButton = TextButton(
       style: TextButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 241, 241, 241),
@@ -283,7 +293,7 @@ class _DigginCommentState extends State<DigginComment> {
       onPressed: () async {
         bool delStatus = await Comment.delComment(
             widget.comment.uid, widget.comment.id.toString());
-        showDeleteStatus(delStatus);
+        showEditDelStatus(delStatus);
         // UI 쓰레드에서 실행되도록 Future.delayed를 사용하여 호출
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.of(context).pop();
@@ -293,10 +303,96 @@ class _DigginCommentState extends State<DigginComment> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("댓글 삭제"),
-      content: const Text("삭제하시겠습니까?"),
+      title: const Text("댓글 관리"),
+      content: const Text("수정/삭제하시겠습니까?"),
       actions: [
+        showPutButton,
         deleteButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showEditAlert(BuildContext context, commentModel comment) {
+    void showEditStatus(status) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pop(context);
+          });
+
+          return AlertDialog(
+            content: Text(status ? '처리되었습니다.' : '엥 뭐지'),
+          );
+        },
+      );
+    }
+
+    Widget putButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 241, 231, 230),
+      ),
+      child: const Text(
+        "수정",
+      ),
+      onPressed: () async {
+        Map<String, dynamic> commentInfo = {
+          'content': comment.content!,
+          'id': comment.id.toString(),
+          'parent_id':
+              (comment.parent_id != null) ? comment.parent_id.toString() : null,
+          'uid': comment.uid,
+          'nickname': comment.nickname,
+          'taguser': comment.taguser,
+        };
+
+        bool putStatus =
+            await Comment.putComment(commentInfo, widget.comment.id.toString());
+        showEditStatus(putStatus);
+        // UI 쓰레드에서 실행되도록 Future.delayed를 사용하여 호출
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.of(context).pop();
+        });
+      },
+    );
+    Widget cancelButton = TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 241, 241, 241),
+      ),
+      child: const Text("취소"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: const Text("댓글 수정"),
+      content: SizedBox(
+        height: 100,
+        child: Column(
+          children: const [
+            Text("수정 내용을 입력해주세요"),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        putButton,
         cancelButton,
       ],
     );

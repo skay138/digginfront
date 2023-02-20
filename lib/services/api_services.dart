@@ -369,6 +369,35 @@ class Comment {
     return false;
   }
 
+  static Future<bool> putComment(
+      Map<String, dynamic> commentInfo, commentId) async {
+    Map<String, String> auth = {
+      'authorization': FirebaseAuth.instance.currentUser!.uid
+    };
+    final url = Uri.parse('$baseUrl$commentId');
+    Map<String, dynamic> infoForSend;
+    if (commentInfo['parent_id'] == null) {
+      infoForSend = {
+        'uid': commentInfo['uid'],
+        'content': commentInfo['content'],
+      };
+    } else {
+      infoForSend = commentInfo;
+    }
+    final response = await http.post(
+      url,
+      headers: auth,
+      body: infoForSend,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else if (response.statusCode == 400) {
+      return false;
+    }
+
+    return false;
+  }
+
   static Future<bool> delComment(String uid, String commentId) async {
     Map<String, String> auth = {
       'authorization': FirebaseAuth.instance.currentUser!.uid
