@@ -302,11 +302,19 @@ class Comment {
       'authorization': FirebaseAuth.instance.currentUser!.uid
     };
     final url = Uri.parse('$baseUrl$postId');
-
+    Map<String, dynamic> infoForSend;
+    if (commentInfo['parent_id'] == null) {
+      infoForSend = {
+        'uid': commentInfo['uid'],
+        'content': commentInfo['content'],
+      };
+    } else {
+      infoForSend = commentInfo;
+    }
     final response = await http.post(
       url,
       headers: auth,
-      body: commentInfo,
+      body: infoForSend,
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
