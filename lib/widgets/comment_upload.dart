@@ -86,7 +86,9 @@ class _CommentUploadState extends State<CommentUpload> {
                 });
               },
               decoration: InputDecoration(
-                label: Text(widget.parentNickname ?? ''),
+                label: Text((widget.parentNickname != null)
+                    ? '${widget.parentNickname} 에게 답글'
+                    : ''),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 border: const OutlineInputBorder(),
