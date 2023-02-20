@@ -50,8 +50,6 @@ class _CommentwidgetState extends State<Commentwidget> {
           children: [
             CommentUpload(
               postId: widget.postId,
-              parentId: widget.parentId,
-              parentNickname: widget.parentNickname,
             ),
             FutureBuilder(
               future: widget.comments,
@@ -69,6 +67,7 @@ class _CommentwidgetState extends State<Commentwidget> {
                           comment: comment,
                           setParent: setParent,
                           parentId: widget.parentId,
+                          parentNickname: widget.parentNickname,
                         ),
                     ],
                   );
@@ -85,107 +84,135 @@ class _CommentwidgetState extends State<Commentwidget> {
   }
 }
 
-class DigginComment extends StatelessWidget {
+class DigginComment extends StatefulWidget {
   final commentModel comment;
   DigginComment({
     Key? key,
     required this.comment,
     required this.setParent,
     this.parentId,
+    this.parentNickname,
   }) : super(key: key);
   String? parentId;
+  String? parentNickname;
   final Function setParent;
+
+  @override
+  State<DigginComment> createState() => _DigginCommentState();
+}
+
+class _DigginCommentState extends State<DigginComment> {
+  String? selectedParentId;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (parentId != comment.id.toString()) {
-          parentId = comment.id.toString();
-          setParent(comment.id.toString(), comment.nickname);
-        } else {
-          parentId = null;
-          setParent(null, null);
-        }
-      },
-      onLongPress: () {
-        if (comment.uid == FirebaseAuth.instance.currentUser!.uid) {
-          showDeleteAlert(context);
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 255, 255, 255),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 5,
-                  offset: const Offset(5, 5),
-                  color: const Color.fromARGB(255, 190, 216, 247)
-                      .withOpacity(0.2)),
-            ]),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 5,
-            vertical: 5,
-          ),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              children: [
-                Row(
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              if (widget.parentId != widget.comment.id.toString()) {
+                widget.parentId = widget.comment.id.toString();
+                widget.setParent(
+                    widget.comment.id.toString(), widget.comment.nickname);
+              } else {
+                widget.parentId = null;
+                widget.setParent(null, null);
+              }
+              selectedParentId = widget.parentId;
+            });
+          },
+          onLongPress: () {
+            if (widget.comment.uid == FirebaseAuth.instance.currentUser!.uid) {
+              showDeleteAlert(context);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 5,
+                      offset: const Offset(5, 5),
+                      color: const Color.fromARGB(255, 190, 216, 247)
+                          .withOpacity(0.2)),
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 5,
+              ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
                   children: [
-                    FutureBuilder(
-                      future: Account.getProfile(comment.uid),
-                      builder: ((context, snapshot) {
-                        return InkWell(
-                          onTap: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(
-                                    builder: (BuildContext context) =>
-                                        ProfilePage(
-                                          user: snapshot.data!,
-                                        )));
-                          },
-                          child: UserImgCircle(
-                            size: 35,
-                            uid: comment.uid,
-                          ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Row(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            comment.nickname,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
+                        FutureBuilder(
+                          future: Account.getProfile(widget.comment.uid),
+                          builder: ((context, snapshot) {
+                            return InkWell(
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            ProfilePage(
+                                              user: snapshot.data!,
+                                            )));
+                              },
+                              child: UserImgCircle(
+                                size: 35,
+                                uid: widget.comment.uid,
+                              ),
+                            );
+                          }),
                         ),
-                        Text(
-                          comment.content.toString(),
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                widget.comment.nickname,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Text(
+                              widget.comment.content.toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        (widget.comment.id.toString() != selectedParentId)
+            ? const SizedBox(
+                width: 0,
+              )
+            : CommentUpload(
+                postId: widget.comment.id.toString(),
+                parentId: widget.parentId,
+                parentNickname: widget.parentNickname,
+              ),
+      ],
     );
   }
 
@@ -223,8 +250,8 @@ class DigginComment extends StatelessWidget {
         style: TextStyle(color: Colors.white),
       ),
       onPressed: () async {
-        bool delStatus =
-            await Comment.delComment(comment.uid, comment.id.toString());
+        bool delStatus = await Comment.delComment(
+            widget.comment.uid, widget.comment.id.toString());
         showDeleteStatus(delStatus);
         // UI 쓰레드에서 실행되도록 Future.delayed를 사용하여 호출
         Future.delayed(const Duration(seconds: 1), () {
