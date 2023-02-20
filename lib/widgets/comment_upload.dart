@@ -8,11 +8,13 @@ class CommentUpload extends StatefulWidget {
   CommentUpload({
     super.key,
     required this.postId,
-    this.parentUid,
+    this.parentId,
+    this.parentNickname,
     this.tagUid,
   });
   final String postId;
-  final String? parentUid;
+  final String? parentId;
+  final String? parentNickname;
   final List<String>? tagUid;
   final String currentUser = FirebaseAuth.instance.currentUser!.uid;
   late final Future<userModel> user = Account.getProfile(currentUser);
@@ -28,15 +30,16 @@ class _CommentUploadState extends State<CommentUpload> {
     'content': '',
   };
   String commentContent = '';
-  TextEditingController textCleaner = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    print(widget.parentNickname);
     setState(() {
       commentInfo['uid'] = widget.currentUser;
-      if (widget.parentUid != null) {
-        commentInfo['parent_id'] = widget.parentUid;
+      if (widget.parentId != null) {
+        commentInfo['parent_id'] = widget.parentId;
       }
       if (widget.tagUid != null) {
         commentInfo['tag_uid'] = widget.tagUid;
@@ -46,7 +49,7 @@ class _CommentUploadState extends State<CommentUpload> {
 
   @override
   Widget build(BuildContext context) {
-    void fShowDialog(status) {
+    void showCommentStatus(status) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -74,16 +77,16 @@ class _CommentUploadState extends State<CommentUpload> {
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: TextField(
-              controller: textCleaner,
               onChanged: (value) {
                 setState(() {
                   commentInfo['content'] = value;
                 });
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                label: Text(widget.parentNickname ?? ''),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                border: OutlineInputBorder(),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                border: const OutlineInputBorder(),
               ),
             ),
           ),
@@ -91,11 +94,11 @@ class _CommentUploadState extends State<CommentUpload> {
         IconButton(
           onPressed: () async {
             bool status = await Comment.newComment(commentInfo, widget.postId);
-            fShowDialog(status);
-            textCleaner.clear();
+            showCommentStatus(status);
+            controller.clear();
           },
           icon: const Icon(Icons.send),
-        )
+        ),
       ],
     );
   }

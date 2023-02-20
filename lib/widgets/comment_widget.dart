@@ -7,17 +7,36 @@ import 'package:flutter/material.dart';
 
 import '../services/api_services.dart';
 
-class Commentwidget extends StatelessWidget {
+class Commentwidget extends StatefulWidget {
   final Future<List<commentModel>> comments;
-  const Commentwidget({
+  Commentwidget({
     super.key,
     required this.comments,
     required this.postId,
+    this.parentId,
+    this.parentNickname,
   });
+
+  String? parentId;
+  String? parentNickname;
   final String postId;
+
+  @override
+  State<Commentwidget> createState() => _CommentwidgetState();
+}
+
+class _CommentwidgetState extends State<Commentwidget> {
+  void setParent(String? pId, String? pNickname) {
+    setState(() {
+      widget.parentId = pId;
+      widget.parentNickname = pNickname;
+    });
+  }
+
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    void addComment() {}
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,9 +48,13 @@ class Commentwidget extends StatelessWidget {
           ),
           initiallyExpanded: true,
           children: [
-            CommentUpload(postId: postId),
+            CommentUpload(
+              postId: widget.postId,
+              parentId: widget.parentId,
+              parentNickname: widget.parentNickname,
+            ),
             FutureBuilder(
-              future: comments,
+              future: widget.comments,
               builder: (context, res) {
                 if (res.data?.isEmpty == true) {
                   return const Padding(
@@ -42,7 +65,11 @@ class Commentwidget extends StatelessWidget {
                   return Column(
                     children: [
                       for (var comment in res.data!)
-                        DigginComment(comment: comment),
+                        DigginComment(
+                          comment: comment,
+                          setParent: setParent,
+                          parentId: widget.parentId,
+                        ),
                     ],
                   );
                 }
@@ -60,11 +87,26 @@ class Commentwidget extends StatelessWidget {
 
 class DigginComment extends StatelessWidget {
   final commentModel comment;
-  const DigginComment({Key? key, required this.comment}) : super(key: key);
-
+  DigginComment({
+    Key? key,
+    required this.comment,
+    required this.setParent,
+    this.parentId,
+  }) : super(key: key);
+  String? parentId;
+  final Function setParent;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        if (parentId != comment.id.toString()) {
+          parentId = comment.id.toString();
+          setParent(comment.id.toString(), comment.nickname);
+        } else {
+          parentId = null;
+          setParent(null, null);
+        }
+      },
       onLongPress: () {
         if (comment.uid == FirebaseAuth.instance.currentUser!.uid) {
           showDeleteAlert(context);
