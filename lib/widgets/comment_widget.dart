@@ -64,6 +64,7 @@ class _CommentwidgetState extends State<Commentwidget> {
                     children: [
                       for (var comment in res.data!)
                         DigginComment(
+                          postId: widget.postId,
                           comment: comment,
                           setParent: setParent,
                           parentId: widget.parentId,
@@ -90,9 +91,11 @@ class DigginComment extends StatefulWidget {
     Key? key,
     required this.comment,
     required this.setParent,
+    required this.postId,
     this.parentId,
     this.parentNickname,
   }) : super(key: key);
+  String postId;
   String? parentId;
   String? parentNickname;
   final Function setParent;
@@ -208,7 +211,7 @@ class _DigginCommentState extends State<DigginComment> {
                 width: 0,
               )
             : CommentUpload(
-                postId: widget.comment.id.toString(),
+                postId: widget.postId,
                 parentId: widget.parentId,
                 parentNickname: widget.parentNickname,
               ),
