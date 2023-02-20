@@ -35,7 +35,7 @@ class _CommentUploadState extends State<CommentUpload> {
   @override
   void initState() {
     super.initState();
-    print(widget.parentNickname);
+
     setState(() {
       commentInfo['uid'] = widget.currentUser;
       if (widget.parentId != null) {
@@ -49,6 +49,9 @@ class _CommentUploadState extends State<CommentUpload> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      commentInfo['parent_id'] = widget.parentId;
+    });
     void showCommentStatus(status) {
       showDialog(
         context: context,
