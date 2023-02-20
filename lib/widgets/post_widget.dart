@@ -83,7 +83,7 @@ class DigginPost extends StatelessWidget {
                                 color: Colors.black),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 35),
+                            padding: const EdgeInsets.symmetric(horizontal: 50),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
