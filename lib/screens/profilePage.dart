@@ -7,13 +7,27 @@ import 'package:digginfront/widgets/post_grid_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.user});
-  final userModel user;
+class ProfilePage extends StatefulWidget {
+  ProfilePage({super.key, required this.user});
+  userModel user;
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
   Widget build(BuildContext context) {
-    Future<List<postModel>> mypost = Posting.getMyPosts(user.uid);
+    Future<List<postModel>> mypost = Posting.getMyPosts(widget.user.uid);
+
+    // 유저 정보 업데이트
+    void getUpdate() async {
+      userModel userUpdated = await Account.getProfile(widget.user.uid);
+      setState(() {
+        widget.user = userUpdated;
+      });
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -21,7 +35,8 @@ class ProfilePage extends StatelessWidget {
             SizedBox(
                 height: 270,
                 child: _TopPortion(
-                  user: user,
+                  user: widget.user,
+                  getUpdate: getUpdate,
                 )),
             SizedBox(
               height: 120,
@@ -32,7 +47,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 16),
                     const SizedBox(height: 16),
                     _ProfileInfoRow(
-                      user: user,
+                      user: widget.user,
                     ),
                   ],
                 ),
@@ -51,9 +66,13 @@ class ProfilePage extends StatelessWidget {
 
 class _TopPortion extends StatelessWidget {
   userModel user;
-  _TopPortion({Key? key, required this.user}) : super(key: key);
+  _TopPortion({
+    Key? key,
+    required this.user,
+    required this.getUpdate,
+  }) : super(key: key);
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
-
+  final Function getUpdate;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -145,6 +164,7 @@ class _TopPortion extends StatelessWidget {
                       : FollowBtn(
                           follower: currentUserUid,
                           followee: user.uid,
+                          getUpdate: getUpdate,
                         ),
                 ],
               ),
@@ -317,10 +337,12 @@ class FollowBtn extends StatefulWidget {
     super.key,
     required this.followee,
     required this.follower,
+    required this.getUpdate,
   });
 
   final String follower;
   final String followee;
+  final Function getUpdate;
 
   @override
   State<FollowBtn> createState() => _FollowBtnState();
@@ -342,7 +364,7 @@ class _FollowBtnState extends State<FollowBtn> {
 
   @override
   Widget build(BuildContext context) {
-    void followHanddle(bool status) async {
+    Future<String> followHanddle(bool status) async {
       status
           ? await Account.deleteFollow(followInfo)
           : await Account.postFollow(followInfo);
@@ -350,6 +372,8 @@ class _FollowBtnState extends State<FollowBtn> {
       setState(() {
         getIsfollowing = Account.isFollowing(widget.follower, widget.followee);
       });
+
+      return 'done';
     }
 
     return FutureBuilder(
@@ -357,10 +381,11 @@ class _FollowBtnState extends State<FollowBtn> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return IconButton(
-            onPressed: () {
-              followHanddle(snapshot.data!);
-
-              // post.userlike 처리
+            onPressed: () async {
+              final res = await followHanddle(snapshot.data!);
+              if (mounted) {
+                widget.getUpdate();
+              }
             },
             icon: Icon(
               (snapshot.data!)
