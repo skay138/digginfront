@@ -70,10 +70,15 @@ class _CommentUploadState extends State<CommentUpload> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        UserImgCircle(
-          size: 40,
-          uid: widget.currentUser,
-        ),
+        (commentInfo['parent_id'] == null)
+            ? UserImgCircle(
+                size: 40,
+                uid: widget.currentUser,
+              )
+            : const SizedBox(
+                width: 40,
+                height: 40,
+              ),
         SizedBox(
           width: 220,
           height: 40,
