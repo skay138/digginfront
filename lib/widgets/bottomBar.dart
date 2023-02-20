@@ -45,9 +45,9 @@ class _BottomBarState extends State<BottomBar> {
                     context,
                     MaterialPageRoute<void>(
                       builder: (BuildContext context) => UploadPage(
-                        getUpdate: widget.getUpdate,
-                        updateRecentPost: widget.updateRecentPost,
-                      ),
+                          //getUpdate: widget.getUpdate,
+                          //updateRecentPost: widget.updateRecentPost,
+                          ),
                     ),
                   );
                 },
