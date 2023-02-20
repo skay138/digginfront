@@ -2,6 +2,7 @@ import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/profilePage.dart';
+import 'package:digginfront/screens/uploadPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/postLikeBtn.dart';
@@ -11,23 +12,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PostDetail extends StatelessWidget {
+class PostDetail extends StatefulWidget {
   final postModel post;
 
-  late final Future<List<commentModel>> comments = Comment.getComment(post.id);
-  late final Future<userModel> user = Account.getProfile(post.uid);
-  final String currentUser = FirebaseAuth.instance.currentUser!.uid;
-
-  PostDetail({
+  const PostDetail({
     super.key,
     required this.post,
   });
 
   @override
+  State<PostDetail> createState() => _PostDetailState();
+}
+
+class _PostDetailState extends State<PostDetail> {
+  late final Future<List<commentModel>> comments =
+      Comment.getComment(widget.post.id);
+
+  late final Future<userModel> user = Account.getProfile(widget.post.uid);
+
+  final String currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
   Widget build(BuildContext context) {
-    String youtubeLinkId = post.youtube_link;
+    String youtubeLinkId = widget.post.youtube_link;
     DateTime nowTime = DateTime.now();
-    DateTime postTime = DateTime.parse(post.date);
+    DateTime postTime = DateTime.parse(widget.post.date);
     Duration duration = nowTime.difference(postTime);
     // 복사완료 표시 함수
     void _showDialog() {
@@ -61,47 +70,79 @@ class PostDetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: FutureBuilder(
-                  future: user,
-                  builder: (context, snapshot) {
-                    return InkWell(
-                      onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => ProfilePage(
-                              user: snapshot.data!,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: FutureBuilder(
+                      future: user,
+                      builder: (context, snapshot) {
+                        return InkWell(
+                          onTap: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) => ProfilePage(
+                                  user: snapshot.data!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                UserImgCircle(
+                                  size: 45,
+                                  uid: (snapshot.data != null)
+                                      ? snapshot.data!.uid
+                                      : currentUser,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  widget.post.nickname,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
+                    ),
+                  ),
+                  (widget.post.uid == currentUser)
+                      ? Row(
                           children: [
-                            UserImgCircle(
-                              size: 45,
-                              uid: (snapshot.data != null)
-                                  ? snapshot.data!.uid
-                                  : currentUser,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              post.nickname,
-                              style: const TextStyle(
-                                fontSize: 24,
-                              ),
-                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          UploadPage(
+                                        post: widget.post,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Text('수정')),
+                            TextButton(
+                                onPressed: () {
+                                  Posting.delPosting(
+                                      currentUser, widget.post.id);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('삭제'))
                           ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        )
+                      : const SizedBox(),
+                ],
               ),
               Container(
                 width: 400,
@@ -111,7 +152,7 @@ class PostDetail extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: ThumbnailCrop(
-                    thumbnailUrl: post.youtube_thumb,
+                    thumbnailUrl: widget.post.youtube_thumb,
                     width: 300,
                     height: 300,
                   ),
@@ -126,7 +167,7 @@ class PostDetail extends StatelessWidget {
                     width: 200,
                     child: Text(
                       // 유튜브 제목
-                      post.youtube_title,
+                      widget.post.youtube_title,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -135,7 +176,7 @@ class PostDetail extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      String youtubeLink = post.youtube_link;
+                      String youtubeLink = widget.post.youtube_link;
                       Clipboard.setData(
                         ClipboardData(text: 'https://youtu.be/$youtubeLink'),
                       );
@@ -143,7 +184,7 @@ class PostDetail extends StatelessWidget {
                     },
                     icon: const Icon(Icons.link),
                   ),
-                  postlikebtn(currentUser: currentUser, post: post),
+                  postlikebtn(currentUser: currentUser, post: widget.post),
                 ],
               ),
               const SizedBox(
@@ -155,7 +196,7 @@ class PostDetail extends StatelessWidget {
                   SizedBox(
                     width: 300,
                     child: Text(
-                      post.title,
+                      widget.post.title,
                       style: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold),
                     ),
@@ -166,7 +207,7 @@ class PostDetail extends StatelessWidget {
                   SizedBox(
                     width: 280,
                     child: Text(
-                      post.content.toString(),
+                      widget.post.content.toString(),
                       style: const TextStyle(
                         fontSize: 18,
                       ),
@@ -193,7 +234,7 @@ class PostDetail extends StatelessWidget {
               ),
               Commentwidget(
                 comments: comments,
-                postId: post.id.toString(),
+                postId: widget.post.id.toString(),
               ),
             ],
           ),

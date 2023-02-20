@@ -39,8 +39,7 @@ class _BottomBarState extends State<BottomBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          UploadPage(user: widget.user),
+                      builder: (BuildContext context) => UploadPage(),
                     ),
                   );
                 },

@@ -19,3 +19,16 @@ class userModel {
         is_active = json['is_active'],
         is_signed = json['is_signed'];
 }
+
+class followModel {
+  final String followerFollower,
+      followerFollowee,
+      followeeFollower,
+      followeeFollowee;
+
+  followModel.fromJson(Map<String, dynamic> json)
+      : followerFollower = json['follower_follower']!.toString(),
+        followerFollowee = json['follower_followee']!.toString(),
+        followeeFollower = json['followee_follower']!.toString(),
+        followeeFollowee = json['followee_followee']!.toString();
+}

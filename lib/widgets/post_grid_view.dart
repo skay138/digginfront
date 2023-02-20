@@ -38,7 +38,7 @@ class PostGridView extends StatelessWidget {
                   needText: isFeed ? true : false,
                   isFeed: isFeed ? true : false,
                   borderRadius: 0,
-                  size: isFeed ? 350 : 200,
+                  size: isFeed ? 320 : 200,
                   post: post);
             },
           );

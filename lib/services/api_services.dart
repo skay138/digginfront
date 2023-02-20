@@ -199,6 +199,17 @@ class Posting {
     }
   }
 
+  static Future<postModel> getdetailpost(int pid) async {
+    final url = Uri.parse('$baseUrl$pid');
+    final res = await http.get(url);
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      return postModel.fromJson(data);
+    } else {
+      throw Error();
+    }
+  }
+
   static Future<List<postModel>> getMyPosts(String uid) async {
     String recentPosts = "mypost?uid=$uid";
     Map<String, String> auth = {
@@ -251,6 +262,39 @@ class Posting {
       return false;
     }
     throw Error();
+  }
+
+  static Future<bool> modPosting(
+      Map<String, dynamic> postInfo, int postId) async {
+    final pId = postId;
+    final url = Uri.parse('$baseUrl$pId');
+    final response = await http.put(
+      url,
+      body: postInfo,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else if (response.statusCode == 400) {
+      return false;
+    } else {
+      throw Error();
+    }
+  }
+
+  static Future<bool> delPosting(String uid, int postId) async {
+    final postpath = postId;
+    final url = Uri.parse('$baseUrl$postpath');
+    final response = await http.delete(
+      url,
+      body: {"uid": uid},
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    } else {
+      print(response.body);
+      return false;
+    }
   }
 
   static Future<List<postModel>> searchPost(String keyword, String type) async {

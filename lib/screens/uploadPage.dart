@@ -1,10 +1,13 @@
-import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/models/postModel.dart';
+import 'package:digginfront/screens/postDetail.dart';
 import 'package:digginfront/services/api_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  UploadPage({super.key, required this.user});
-  userModel user;
+  UploadPage({super.key, this.post});
+  final postModel? post;
+  final String currentUser = FirebaseAuth.instance.currentUser!.uid;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
@@ -22,10 +25,19 @@ class _UploadPageState extends State<UploadPage> {
     });
   }
 
+  bool isModify = false;
+
   @override
   void initState() {
     super.initState();
-    setInfo('uid', widget.user.uid);
+    setInfo('uid', widget.currentUser);
+    print(widget.post);
+    if (widget.post != null) {
+      isModify = true;
+      setInfo('title', widget.post!.title);
+      setInfo('content', widget.post!.content);
+      setInfo('youtube_link', widget.post!.youtube_link);
+    }
   }
 
   @override
@@ -77,9 +89,9 @@ class _UploadPageState extends State<UploadPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "업로드 내용을 입력해주세요",
-                style: TextStyle(
+              Text(
+                isModify ? "수정할 내용을 입력해주세요" : "업로드 내용을 입력해주세요",
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -88,31 +100,55 @@ class _UploadPageState extends State<UploadPage> {
                 height: 30,
               ),
               makeInput(
-                label: "유튜브 링크",
-                setInfo: setInfo,
-                infoType: 'youtube_link',
-              ),
+                  label: "유튜브 링크",
+                  setInfo: setInfo,
+                  infoType: 'youtube_link',
+                  initialValue: postInfo['youtube_link']),
               makeInput(
-                label: "제목",
-                setInfo: setInfo,
-                infoType: 'title',
-              ),
+                  label: "제목",
+                  setInfo: setInfo,
+                  infoType: 'title',
+                  initialValue: postInfo['title']),
               makeInput(
-                label: "내용",
-                setInfo: setInfo,
-                infoType: 'content',
-              ),
+                  label: "내용",
+                  setInfo: setInfo,
+                  infoType: 'content',
+                  initialValue: postInfo['content']),
               Row(
                 children: [
                   TextButton(
                     onPressed: () async {
-                      bool status = await Posting.newPosting(postInfo);
-                      if (status) {
-                        if (mounted) {
-                          Navigator.pop(context);
+                      if (isModify) {
+                        bool status =
+                            await Posting.modPosting(postInfo, widget.post!.id);
+                        if (status) {
+                          if (mounted) {
+                            postModel post =
+                                await Posting.getdetailpost(widget.post!.id);
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => PostDetail(
+                                    post: post,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        } else {
+                          FlutterDialog();
                         }
                       } else {
-                        FlutterDialog();
+                        bool status = await Posting.newPosting(postInfo);
+                        if (status) {
+                          if (mounted) {
+                            Navigator.pop(context);
+                          }
+                        } else {
+                          FlutterDialog();
+                        }
                       }
                     },
                     child: const Text(
@@ -139,7 +175,7 @@ class _UploadPageState extends State<UploadPage> {
   }
 }
 
-Widget makeInput({label, obsureText = false, setInfo, infoType}) {
+Widget makeInput({label, obsureText = false, setInfo, infoType, initialValue}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -151,7 +187,8 @@ Widget makeInput({label, obsureText = false, setInfo, infoType}) {
       const SizedBox(
         height: 5,
       ),
-      TextField(
+      TextFormField(
+        initialValue: initialValue,
         onChanged: (value) {
           setInfo(infoType, value);
         },
