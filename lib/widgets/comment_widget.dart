@@ -60,17 +60,27 @@ class _CommentwidgetState extends State<Commentwidget> {
                     child: Text('아직 댓글이 없어요!'),
                   );
                 } else if (res.hasData) {
-                  return Column(
-                    children: [
-                      for (var comment in res.data!)
-                        DigginComment(
-                          postId: widget.postId,
+                  List<DigginComment> comments = [];
+                  for (var comment in res.data!) {
+                    if (comment.parent_id == null) {
+                      comments.add(DigginComment(
+                          ischild: false,
                           comment: comment,
                           setParent: setParent,
-                          parentId: widget.parentId,
-                          parentNickname: widget.parentNickname,
-                        ),
-                    ],
+                          postId: widget.postId));
+                    }
+                    for (var check in res.data!) {
+                      if (comment.id == check.parent_id) {
+                        comments.add(DigginComment(
+                            ischild: true,
+                            comment: check,
+                            setParent: setParent,
+                            postId: widget.postId));
+                      }
+                    }
+                  }
+                  return Column(
+                    children: [for (var cmt in comments) cmt],
                   );
                 }
                 return const Center(
@@ -87,11 +97,13 @@ class _CommentwidgetState extends State<Commentwidget> {
 
 class DigginComment extends StatefulWidget {
   final commentModel comment;
+  final bool ischild;
   DigginComment({
     Key? key,
     required this.comment,
     required this.setParent,
     required this.postId,
+    required this.ischild,
     this.parentId,
     this.parentNickname,
   }) : super(key: key);
@@ -153,6 +165,11 @@ class _DigginCommentState extends State<DigginComment> {
                   children: [
                     Row(
                       children: [
+                        widget.ischild
+                            ? const SizedBox(
+                                width: 30,
+                              )
+                            : const SizedBox(),
                         FutureBuilder(
                           future: Account.getProfile(widget.comment.uid),
                           builder: ((context, snapshot) {
