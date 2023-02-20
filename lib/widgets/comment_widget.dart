@@ -19,6 +19,7 @@ class Commentwidget extends StatefulWidget {
 
   String? parentId;
   String? parentNickname;
+  String? selectedParentId;
   final String postId;
 
   @override
@@ -30,6 +31,7 @@ class _CommentwidgetState extends State<Commentwidget> {
     setState(() {
       widget.parentId = pId;
       widget.parentNickname = pNickname;
+      widget.selectedParentId = pId;
     });
   }
 
@@ -64,18 +66,26 @@ class _CommentwidgetState extends State<Commentwidget> {
                   for (var comment in res.data!) {
                     if (comment.parent_id == null) {
                       comments.add(DigginComment(
-                          ischild: false,
-                          comment: comment,
-                          setParent: setParent,
-                          postId: widget.postId));
+                        ischild: false,
+                        comment: comment,
+                        setParent: setParent,
+                        postId: widget.postId,
+                        parentId: widget.parentId,
+                        parentNickname: widget.parentNickname,
+                        selectedParentId: widget.selectedParentId,
+                      ));
                     }
                     for (var check in res.data!) {
                       if (comment.id == check.parent_id) {
                         comments.add(DigginComment(
-                            ischild: true,
-                            comment: check,
-                            setParent: setParent,
-                            postId: widget.postId));
+                          ischild: true,
+                          comment: check,
+                          setParent: setParent,
+                          postId: widget.postId,
+                          parentId: widget.parentId,
+                          parentNickname: widget.parentNickname,
+                          selectedParentId: widget.selectedParentId,
+                        ));
                       }
                     }
                   }
@@ -106,10 +116,12 @@ class DigginComment extends StatefulWidget {
     required this.ischild,
     this.parentId,
     this.parentNickname,
+    this.selectedParentId,
   }) : super(key: key);
   String postId;
   String? parentId;
   String? parentNickname;
+  String? selectedParentId;
   final Function setParent;
 
   @override
@@ -117,8 +129,6 @@ class DigginComment extends StatefulWidget {
 }
 
 class _DigginCommentState extends State<DigginComment> {
-  String? selectedParentId;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -134,7 +144,6 @@ class _DigginCommentState extends State<DigginComment> {
                 widget.parentId = null;
                 widget.setParent(null, null);
               }
-              selectedParentId = widget.parentId;
             });
           },
           onLongPress: () {
@@ -223,7 +232,7 @@ class _DigginCommentState extends State<DigginComment> {
             ),
           ),
         ),
-        (widget.comment.id.toString() != selectedParentId)
+        (widget.comment.id.toString() != widget.selectedParentId)
             ? const SizedBox(
                 width: 0,
               )
