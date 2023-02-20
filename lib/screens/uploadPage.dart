@@ -1,13 +1,19 @@
 import 'package:digginfront/models/postModel.dart';
+import 'package:digginfront/models/userModel.dart';
 import 'package:digginfront/screens/postDetail.dart';
 import 'package:digginfront/services/api_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  UploadPage({super.key, this.post});
-  final postModel? post;
-  final String currentUser = FirebaseAuth.instance.currentUser!.uid;
+  UploadPage({
+    super.key,
+    required this.user,
+    required this.getUpdate,
+    required this.updateRecentPost,
+  });
+  userModel user;
+  final Function getUpdate;
+  final Function updateRecentPost;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
@@ -150,6 +156,8 @@ class _UploadPageState extends State<UploadPage> {
                           FlutterDialog();
                         }
                       }
+                      widget.getUpdate();
+                      widget.updateRecentPost();
                     },
                     child: const Text(
                       '확인',

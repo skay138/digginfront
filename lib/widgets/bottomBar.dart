@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:digginfront/screens/uploadPage.dart';
 
 class BottomBar extends StatefulWidget {
-  BottomBar(
-      {super.key,
-      required this.tabState,
-      required this.setTabState,
-      required this.user});
+  BottomBar({
+    super.key,
+    required this.tabState,
+    required this.setTabState,
+    required this.user,
+    required this.getUpdate,
+    required this.updateRecentPost,
+  });
   userModel user;
   String tabState;
   final Function setTabState;
+  final Function getUpdate;
+  final Function updateRecentPost;
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
@@ -39,7 +44,11 @@ class _BottomBarState extends State<BottomBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (BuildContext context) => UploadPage(),
+                      builder: (BuildContext context) => UploadPage(
+                        user: widget.user,
+                        getUpdate: widget.getUpdate,
+                        updateRecentPost: widget.updateRecentPost,
+                      ),
                     ),
                   );
                 },
