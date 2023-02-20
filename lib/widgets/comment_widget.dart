@@ -135,16 +135,18 @@ class _DigginCommentState extends State<DigginComment> {
       children: [
         GestureDetector(
           onTap: () {
-            setState(() {
-              if (widget.parentId != widget.comment.id.toString()) {
-                widget.parentId = widget.comment.id.toString();
-                widget.setParent(
-                    widget.comment.id.toString(), widget.comment.nickname);
-              } else {
-                widget.parentId = null;
-                widget.setParent(null, null);
-              }
-            });
+            if (!widget.ischild) {
+              setState(() {
+                if (widget.parentId != widget.comment.id.toString()) {
+                  widget.parentId = widget.comment.id.toString();
+                  widget.setParent(
+                      widget.comment.id.toString(), widget.comment.nickname);
+                } else {
+                  widget.parentId = null;
+                  widget.setParent(null, null);
+                }
+              });
+            }
           },
           onLongPress: () {
             if (widget.comment.uid == FirebaseAuth.instance.currentUser!.uid) {
