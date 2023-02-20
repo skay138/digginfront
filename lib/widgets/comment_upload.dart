@@ -80,6 +80,7 @@ class _CommentUploadState extends State<CommentUpload> {
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: TextField(
+              controller: controller,
               onChanged: (value) {
                 setState(() {
                   commentInfo['content'] = value;
