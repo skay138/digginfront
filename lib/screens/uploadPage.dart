@@ -3,8 +3,13 @@ import 'package:digginfront/services/api_services.dart';
 import 'package:flutter/material.dart';
 
 class UploadPage extends StatefulWidget {
-  UploadPage({super.key, required this.user});
+  UploadPage({
+    super.key,
+    required this.user,
+    required this.getUpdate,
+  });
   userModel user;
+  final Function getUpdate;
   @override
   State<UploadPage> createState() => _UploadPageState();
 }
@@ -114,6 +119,7 @@ class _UploadPageState extends State<UploadPage> {
                       } else {
                         FlutterDialog();
                       }
+                      widget.getUpdate();
                     },
                     child: const Text(
                       '확인',

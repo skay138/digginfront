@@ -58,6 +58,7 @@ class _MainPageState extends State<MainPage> {
         user: widget.user,
         tabState: tabState,
         setTabState: setTabState,
+        getUpdate: getUpdate,
       ),
     );
   }
