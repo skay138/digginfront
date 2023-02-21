@@ -66,7 +66,7 @@ class _PostDetailState extends State<PostDetail> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
+          padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

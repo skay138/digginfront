@@ -1,8 +1,9 @@
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/screens/postDetail.dart';
-import 'package:digginfront/services/api_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../services/api_services.dart';
 
 class UploadPage extends StatefulWidget {
   UploadPage(
@@ -88,6 +89,62 @@ class _UploadPageState extends State<UploadPage> {
           });
     }
 
+    void areYouSureDialog() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('확실하신가요?'),
+              content: Row(
+                children: [
+                  TextButton(
+                      onPressed: () async {
+                        if (isModify) {
+                          bool status = await Posting.modPosting(
+                              postInfo, widget.post!.id);
+                          if (status) {
+                            if (mounted) {
+                              postModel post =
+                                  await Posting.getdetailpost(widget.post!.id);
+                              if (mounted) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        PostDetail(
+                                      post: post,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          } else {
+                            FlutterDialog();
+                          }
+                        } else {
+                          bool status = await Posting.newPosting(postInfo);
+                          if (status) {
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          } else {
+                            FlutterDialog();
+                          }
+                        }
+                      },
+                      child: const Text('예아ㅏ')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('아니오')),
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -123,42 +180,44 @@ class _UploadPageState extends State<UploadPage> {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () async {
-                      if (isModify) {
-                        bool status =
-                            await Posting.modPosting(postInfo, widget.post!.id);
-                        if (status) {
-                          if (mounted) {
-                            postModel post =
-                                await Posting.getdetailpost(widget.post!.id);
-                            if (mounted) {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) => PostDetail(
-                                    post: post,
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        } else {
-                          FlutterDialog();
-                        }
-                      } else {
-                        bool status = await Posting.newPosting(postInfo);
-                        if (status) {
-                          if (mounted) {
-                            Navigator.pop(context);
-                          }
-                        } else {
-                          FlutterDialog();
-                        }
-                      }
-                      //widget.getUpdate();
-                      //widget.updateRecentPost();
+                    onPressed: () {
+                      areYouSureDialog();
                     },
+
+                    // () async {
+                    //   if (isModify) {
+                    //     bool status =
+                    //         await Posting.modPosting(postInfo, widget.post!.id);
+                    //     if (status) {
+                    //       if (mounted) {
+                    //         postModel post =
+                    //             await Posting.getdetailpost(widget.post!.id);
+                    //         if (mounted) {
+                    //           Navigator.pop(context);
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute<void>(
+                    //               builder: (BuildContext context) => PostDetail(
+                    //                 post: post,
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }
+                    //       }
+                    //     } else {
+                    //       FlutterDialog();
+                    //     }
+                    //   } else {
+                    //     bool status = await Posting.newPosting(postInfo);
+                    //     if (status) {
+                    //       if (mounted) {
+                    //         Navigator.pop(context);
+                    //       }
+                    //     } else {
+                    //       FlutterDialog();
+                    //     }
+                    //   }
+                    // },
                     child: const Text(
                       '확인',
                       style: TextStyle(fontSize: 20),
