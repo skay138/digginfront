@@ -1,4 +1,5 @@
 import 'package:digginfront/models/postModel.dart';
+import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/screens/postDetail.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -150,7 +151,18 @@ class _UploadPageState extends State<UploadPage> {
                         bool status = await Posting.newPosting(postInfo);
                         if (status) {
                           if (mounted) {
-                            Navigator.pop(context);
+                            final user =
+                                await Account.getProfile(widget.currentUser);
+                            if (mounted) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                      user: user,
+                                      page: 'profile',
+                                    ),
+                                  ));
+                            }
                           }
                         } else {
                           FlutterDialog();
