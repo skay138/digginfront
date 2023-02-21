@@ -1,14 +1,13 @@
 import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
-import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/screens/uploadPage.dart';
 import 'package:digginfront/services/api_services.dart';
 import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/postLikeBtn.dart';
+import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
-import 'package:digginfront/widgets/youtube.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,11 +62,50 @@ class _PostDetailState extends State<PostDetail> {
       );
     }
 
+    void areYouSureDialog(currentUser, postid) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('정말요?'),
+              content: Row(
+                children: [
+                  TextButton(
+                      onPressed: () async {
+                        bool status =
+                            await Posting.delPosting(currentUser, postid);
+                        if (status) {
+                          if (mounted) {
+                            final user = await Account.getProfile(currentUser);
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfilePage(user: user),
+                                  ));
+                            }
+                          }
+                        }
+                      },
+                      child: const Text('네')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('아니오')),
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
+          padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -134,21 +172,8 @@ class _PostDetailState extends State<PostDetail> {
                                 },
                                 child: const Text('수정')),
                             TextButton(
-                                onPressed: () async {
-                                  await Posting.delPosting(
-                                      currentUser, widget.post.id);
-                                  final user =
-                                      await Account.getProfile(currentUser);
-                                  if (mounted) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainPage(
-                                            user: user,
-                                            page: 'profile',
-                                          ),
-                                        ));
-                                  }
+                                onPressed: () {
+                                  areYouSureDialog(currentUser, widget.post.id);
                                 },
                                 child: const Text('삭제'))
                           ],
@@ -157,19 +182,21 @@ class _PostDetailState extends State<PostDetail> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.all(10),
-                width: 300,
-                height: 300,
+                width: 400,
+                height: 400,
                 clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(shape: BoxShape.rectangle),
                 child: FittedBox(
                   fit: BoxFit.cover,
-                  child: Image.network(
-                    widget.post.youtube_thumb,
+                  child: ThumbnailCrop(
+                    thumbnailUrl: widget.post.youtube_thumb,
+                    width: 300,
+                    height: 300,
                   ),
                 ),
               ),
-              Center(child: Player(youtubeLinkId, widget.post.youtube_title)),
+              // Player(youtubeLinkId, post.youtube_title),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
