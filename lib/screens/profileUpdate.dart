@@ -226,7 +226,7 @@ class _SignUpState extends State<SignUp> {
                                           ),
                                         ).then((res) => setState(() {}));
                                       },
-                                      child: const Text('프로필 이미지 선택')),
+                                      child: const Text('프로필이미지 선택')),
                                   TextButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -239,7 +239,7 @@ class _SignUpState extends State<SignUp> {
                                           ),
                                         ).then((res) => setState(() {}));
                                       },
-                                      child: const Text('배경 이미지 선택')),
+                                      child: const Text('배경이미지 선택')),
                                 ],
                               ),
                             ],
