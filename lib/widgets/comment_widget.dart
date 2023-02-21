@@ -322,6 +322,7 @@ class _DigginCommentState extends State<DigginComment> {
   }
 
   showEditAlert(BuildContext context, commentModel comment) {
+    String? changedContent = comment.content;
     void showEditStatus(status) {
       showDialog(
         context: context,
@@ -345,23 +346,26 @@ class _DigginCommentState extends State<DigginComment> {
         "수정",
       ),
       onPressed: () async {
-        Map<String, dynamic> commentInfo = {
-          'content': comment.content!,
-          'id': comment.id.toString(),
-          'parent_id':
-              (comment.parent_id != null) ? comment.parent_id.toString() : null,
-          'uid': comment.uid,
-          'nickname': comment.nickname,
-          'taguser': comment.taguser,
-        };
+        if (changedContent != null) {
+          Map<String, dynamic> commentInfo = {
+            'content': changedContent,
+            'id': comment.id.toString(),
+            'parent_id': (comment.parent_id != null)
+                ? comment.parent_id.toString()
+                : null,
+            'uid': comment.uid,
+            //'nickname': comment.nickname,
+            //'taguser': comment.taguser,
+          };
 
-        bool putStatus =
-            await Comment.putComment(commentInfo, widget.comment.id.toString());
-        showEditStatus(putStatus);
-        // UI 쓰레드에서 실행되도록 Future.delayed를 사용하여 호출
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.of(context).pop();
-        });
+          bool putStatus = await Comment.putComment(
+              commentInfo, widget.comment.id.toString());
+          showEditStatus(putStatus);
+          // UI 쓰레드에서 실행되도록 Future.delayed를 사용하여 호출
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
+        }
       },
     );
     Widget cancelButton = TextButton(
@@ -378,13 +382,17 @@ class _DigginCommentState extends State<DigginComment> {
       content: SizedBox(
         height: 100,
         child: Column(
-          children: const [
-            Text("수정 내용을 입력해주세요"),
-            SizedBox(
+          children: [
+            const Text("수정 내용을 입력해주세요"),
+            const SizedBox(
               height: 10,
             ),
-            TextField(
-              decoration: InputDecoration(
+            TextFormField(
+              initialValue: changedContent,
+              onChanged: (value) {
+                changedContent = value;
+              },
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
