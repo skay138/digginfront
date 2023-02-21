@@ -17,7 +17,7 @@ class PostGridView extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 30),
             child: Center(
                 child: Text(
-              "아직 게시글을 작성하지 않았어요!",
+              "사람들을 팔로우해보세요!",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             )),
           );
