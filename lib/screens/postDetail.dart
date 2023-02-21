@@ -9,6 +9,7 @@ import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/postLikeBtn.dart';
 import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
+import 'package:digginfront/widgets/youtube.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -170,8 +171,7 @@ class _PostDetailState extends State<PostDetail> {
                   ),
                 ),
               ),
-              // Player(youtubeLinkId, post.youtube_title),
-
+              Player(youtubeLinkId, widget.post.youtube_title),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
