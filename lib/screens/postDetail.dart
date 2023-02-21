@@ -62,6 +62,45 @@ class _PostDetailState extends State<PostDetail> {
       );
     }
 
+    void areYouSureDialog(currentUser, postid) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('정말요?'),
+              content: Row(
+                children: [
+                  TextButton(
+                      onPressed: () async {
+                        bool status =
+                            await Posting.delPosting(currentUser, postid);
+                        if (status) {
+                          if (mounted) {
+                            final user = await Account.getProfile(currentUser);
+                            if (mounted) {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfilePage(user: user),
+                                  ));
+                            }
+                          }
+                        }
+                      },
+                      child: const Text('네')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('아니오')),
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -134,9 +173,7 @@ class _PostDetailState extends State<PostDetail> {
                                 child: const Text('수정')),
                             TextButton(
                                 onPressed: () {
-                                  Posting.delPosting(
-                                      currentUser, widget.post.id);
-                                  Navigator.pop(context);
+                                  areYouSureDialog(currentUser, widget.post.id);
                                 },
                                 child: const Text('삭제'))
                           ],

@@ -94,7 +94,7 @@ class _UploadPageState extends State<UploadPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('확실하신가요?'),
+              title: const Text('정말요?'),
               content: Row(
                 children: [
                   TextButton(
@@ -107,6 +107,7 @@ class _UploadPageState extends State<UploadPage> {
                               postModel post =
                                   await Posting.getdetailpost(widget.post!.id);
                               if (mounted) {
+                                Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.push(
                                   context,
@@ -133,7 +134,7 @@ class _UploadPageState extends State<UploadPage> {
                           }
                         }
                       },
-                      child: const Text('예아ㅏ')),
+                      child: const Text('네')),
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -183,41 +184,6 @@ class _UploadPageState extends State<UploadPage> {
                     onPressed: () {
                       areYouSureDialog();
                     },
-
-                    // () async {
-                    //   if (isModify) {
-                    //     bool status =
-                    //         await Posting.modPosting(postInfo, widget.post!.id);
-                    //     if (status) {
-                    //       if (mounted) {
-                    //         postModel post =
-                    //             await Posting.getdetailpost(widget.post!.id);
-                    //         if (mounted) {
-                    //           Navigator.pop(context);
-                    //           Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute<void>(
-                    //               builder: (BuildContext context) => PostDetail(
-                    //                 post: post,
-                    //               ),
-                    //             ),
-                    //           );
-                    //         }
-                    //       }
-                    //     } else {
-                    //       FlutterDialog();
-                    //     }
-                    //   } else {
-                    //     bool status = await Posting.newPosting(postInfo);
-                    //     if (status) {
-                    //       if (mounted) {
-                    //         Navigator.pop(context);
-                    //       }
-                    //     } else {
-                    //       FlutterDialog();
-                    //     }
-                    //   }
-                    // },
                     child: const Text(
                       '확인',
                       style: TextStyle(fontSize: 20),
