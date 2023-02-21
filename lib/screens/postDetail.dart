@@ -1,6 +1,7 @@
 import 'package:digginfront/models/commentModel.dart';
 import 'package:digginfront/models/postModel.dart';
 import 'package:digginfront/models/userModel.dart';
+import 'package:digginfront/screens/mainPage.dart';
 import 'package:digginfront/screens/profilePage.dart';
 import 'package:digginfront/screens/uploadPage.dart';
 import 'package:digginfront/services/api_services.dart';
@@ -8,6 +9,7 @@ import 'package:digginfront/widgets/comment_widget.dart';
 import 'package:digginfront/widgets/postLikeBtn.dart';
 import 'package:digginfront/widgets/thumbnailCrop.dart';
 import 'package:digginfront/widgets/userImgCircle.dart';
+import 'package:digginfront/widgets/youtube.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,8 +84,10 @@ class _PostDetailState extends State<PostDetail> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProfilePage(user: user),
+                                    builder: (context) => MainPage(
+                                      user: user,
+                                      page: 'profile',
+                                    ),
                                   ));
                             }
                           }
@@ -182,21 +186,19 @@ class _PostDetailState extends State<PostDetail> {
                 ],
               ),
               Container(
-                width: 400,
-                height: 400,
+                padding: const EdgeInsets.all(10),
+                width: 300,
+                height: 300,
                 clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(shape: BoxShape.rectangle),
                 child: FittedBox(
                   fit: BoxFit.cover,
-                  child: ThumbnailCrop(
-                    thumbnailUrl: widget.post.youtube_thumb,
-                    width: 300,
-                    height: 300,
+                  child: Image.network(
+                    widget.post.youtube_thumb,
                   ),
                 ),
               ),
-              // Player(youtubeLinkId, post.youtube_title),
-
+              Center(child: Player(youtubeLinkId, widget.post.youtube_title)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

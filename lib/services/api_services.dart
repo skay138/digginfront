@@ -384,7 +384,7 @@ class Comment {
     } else {
       infoForSend = commentInfo;
     }
-    final response = await http.post(
+    final response = await http.put(
       url,
       headers: auth,
       body: infoForSend,

@@ -106,6 +106,7 @@ class _CommentUploadState extends State<CommentUpload> {
           onPressed: () async {
             bool status = await Comment.newComment(commentInfo, widget.postId);
             showCommentStatus(status);
+
             controller.clear();
           },
           icon: const Icon(Icons.send),
